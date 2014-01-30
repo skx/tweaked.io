@@ -11,7 +11,7 @@
  </div>
  <table width="100%">
   <tr><td width="10%" valign="top" class="left_menu">
-<h2>Menu</h2>
+<h2>Optimizing</h2>
 <!-- tmpl_if name='menu' -->
 <div class="menu_simple"><ul>
   <!-- tmpl_loop name='menu' -->
@@ -19,6 +19,13 @@
   <!-- /tmpl_loop -->
 </ul></div>
 <!-- /tmpl_if -->
+
+<h2>Measuring</h2>
+<div class="menu_simple"><ul>
+<ul>
+<li><a href="#">Coming Soon</a></li>
+</ul>
+</div>
       </td>
       <td width="80%" valign="top">
 <!-- tmpl_var name='content' -->
