@@ -1,0 +1,40 @@
+<html>
+ <head>
+   <title>Tuning your servers</title>
+   <link rel="stylesheet" type="text/css"  href="/css/style.css" />
+
+ </head>
+ <body>
+
+ <div id="header">
+   <h1><a href="/">Tweaked.io</a> <span>making your servers fly</span></h1>
+ </div>
+ <table width="100%">
+  <tr><td width="10%" valign="top">
+<h2>Menu</h2>
+<!-- tmpl_if name='menu' -->
+<ul>
+  <!-- tmpl_loop name='menu' -->
+
+  <!-- tmpl_if name='bold' -->
+  <li><b><!-- tmpl_var name='name' --></b></li>
+  <!-- tmpl_else -->
+  <li><a href="<!-- tmpl_var name='path' -->"><!-- tmpl_var name='name' --></a></li>
+  <!-- /tmpl_if -->
+  <!-- /tmpl_loop -->
+</ul>
+<!-- /tmpl_if -->
+      </td>
+      <td width="80%" valign="top">
+<!-- tmpl_var name='content' -->
+      </td>
+      <td width="10%" valign="top">
+       <p>Adverts</p>
+       </td>
+       </tr>
+ </table>
+<div id="footer">
+<p>&copy 2014 - <a href="http://steve.org.uk/">Steve Kemp</a></p>
+</div>
+</body>
+</html>
