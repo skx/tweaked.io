@@ -75,6 +75,7 @@ td {
 }
 
 h2 {
+    margin-top: 2em;
     width: 100%;
     border-bottom: 1px solid black;
 }
