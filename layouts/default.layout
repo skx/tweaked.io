@@ -1,6 +1,6 @@
 <html>
  <head>
-   <title>Tuning your servers</title>
+   <title>Optimizing servers<!-- tmpl_if name='title' --> - <!-- tmpl_var name='title' --><!-- tmpl_else -->: Tweaked.io<!-- /tmpl_if --></title>
    <link rel="stylesheet" type="text/css"  href="/css/style.css" />
 
  </head>
@@ -24,7 +24,7 @@
 <!-- tmpl_var name='content' -->
       </td>
       <td width="10%" valign="top">
-       <p>Adverts</p>
+       <p>&nbsp;&nbsp;</p>
        </td>
        </tr>
  </table>
