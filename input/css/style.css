@@ -2,6 +2,9 @@ body {
     background-color: #fefeff;
 }
 
+td {
+    padding: 7px;
+}
 #header {
     padding-top: 5px;
     text-align: center;
