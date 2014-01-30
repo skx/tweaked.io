@@ -9,11 +9,57 @@ Linux is the world-leading open-source kernel.
 
 It is designed to peform well on a wide range of hardware.
 
-System Tuning
--------------
+
+File Handle Limits
+------------------
+
+When you're serving a lot of traffic it is usually the case that the traffic you're serving is coming from a large number of local files.
+
+The kernel has built-in limits on the number of files that a process can open, and raising these limits, at a cost of some system memory, is usually a sane thing to attempt.
+
+You can view the current limit on the number of open-files by running:
+
+<pre class="code">
+cat /proc/sys/fs/file-max
+</pre>
+
+The limit can be raised interactively by running, as `root`:
+
+<pre class="code">
+sysctl -w fs.file-max=100000
+</pre>
+
+If you wish that change to be made persistently you should append to the file `/etc/sysctl.conf` the line:
+
+<pre class="code">
+fs.file-max = 100000
+</pre>
+
+Then run the following command to make your change take effect:
+
+<pre class="code">
+sysctl -p
+</pre>
+
 
 Socket Tuning
 -------------
+
+Append the following to the bottom of `/etc/sysctl.conf`:
+
+<pre class="code">
+net.ipv4.tcp_max_syn_backlog = 2048
+net.core.somaxconn = 1024
+net.ipv4.tcp_syncookies = 1
+</pre>
+
+Once you've made those additions you can cause them to be loaded by running:
+
+<pre class="code">
+sysctl -p
+</pre>
+
+Finally if you've changed these limits you will need to restart the associated daemons.  (For example "`service nginx restart`".)
 
 Scheduler Tuning
 ----------------

@@ -1,16 +1,93 @@
-Title: Tuning nginx
+Title: nginx speedup &amp; optimization guide
 menu: menu
 ----
 
 nginx
 =====
 
-nginx is a small and fast server which generally outperforms most of the alternatives out of the box.
-
-However it can be tuned an awful lot.
+[nginx](http://nginx.org/) is a small and fast server which generally outperforms most of the alternatives out of the box, however there is always room for improvement.
 
 General Tuning
 --------------
+
+nginx uses a fixed number of workers, each of which handles incoming requests.  The general rule of thumb is that you should have one worker for each CPU-core you have.
+
+You can count the CPUs available to your system by running:
+
+<pre class="code">
+grep ^processor /proc/cpuinfo | wc -l
+</pre>
+
+With a quad-core processor this would give you a configuration that started like so:
+
+<pre class="code">
+worker_processes  4;
+
+events {
+    worker_connections  8096;
+    multi_accept        on;
+    use                 epoll;
+}
+
+worker_rlimit_nofile 40000;
+</pre>
+
+Here we've also raised the `worker_connections` setting, which specifies how many connections each worker process can handle.
+
+The total maximum number of connections your server can process is the result of:
+
+* worker_processes * worker_connections (= 32384 in our example).
+
+We've enabled `multi_accept` which causes nginx to attempt to immediately accept as many connections as it can, subject to [the kernel socket setup](/guide/kernel/).
+
+Finally use of the `epoll` event-model is generally recommended for best throughput.
+
+Compression
+-----------
+
+One of the first things that many people try to do is to enable the `gzip` compression module available with nginx.  The intention here is that the objects which the server sends to requesting clients will be smaller, and thus faster to send.
+
+However this involves the trade-off common to tuning - performing the compression takes CPU resources from your server, which frequnetly means that you'd be better off not enabling it at all.
+
+The best approach with compression is to only enable compression for large files, and to avoid compressing things that are unlikely to be shrunk (such as images, executables, and similar binary files).
+
+With that in mind the following is a sensible configuration:
+
+
+<pre class="code">
+gzip  on;
+gzip_min_length 10240;
+gzip_proxied expired no-cache no-store private auth;
+gzip_types text/plain text/css text/xml text/javascript application/x-javascript application/xml;
+gzip_disable "MSIE [1-6]\.";
+</pre>
+
+
+This enables compression for files that are over 10k, aren't being requested by early versions of Microsoft's Internet Explorer, and only attempts to compress text-based files.
+
+
+Filehandle Cache
+----------------
+
+If you're serving a large number of static files you'll benefit from keeping
+filehandles to requested files open - this avoids the need to reopen them in the future.
+
+**NOTE**: You should only run with this enabled if you're not editing the files at the time you're serving them.  Because file accesses are cached any 404s will be cached too, similarly file-sizes will be cached, and if you change them your served content will be out of date.
+
+The following is a good example, which can be placed in either the `server` section of your nginx config, or within the main `http` block:
+
+<pre class="code">
+open_file_cache          max=2000 inactive=20s;
+open_file_cache_valid    60s;
+open_file_cache_min_uses 5;
+open_file_cache_errors   off;
+</pre>
+
+This configuration block tells the server to cache 2000 open filehandles, closing handles that have no hits for 20 seconds.  The cached handles are considered valid for 60 seconds, and only files that were accessed five times will be considered suitable for caching.
+
+The net result should be that frequently accessed files have handles cached for them, which will cut down on filesystem accesses.
+
+**Tip**: You might consider the [kernel tuning](/guide/kernel/) section, which discusses raising the file-handle limit.
 
 Tuning for PHP
 --------------
