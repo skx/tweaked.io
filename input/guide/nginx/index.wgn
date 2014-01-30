@@ -89,5 +89,15 @@ The net result should be that frequently accessed files have handles cached for 
 
 **Tip**: You might consider the [kernel tuning](/guide/kernel/) section, which discusses raising the file-handle limit.
 
+
 Tuning for PHP
 --------------
+
+* **TODO**
+
+
+Alternatives
+------------
+
+When you've reached the very limit of nginx performance you might consider using the [Varnish Cache](http://varnish-cache.org) as a reverse-proxy in front of nginx.
+
