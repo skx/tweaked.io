@@ -2,4 +2,15 @@ Title: Tuning nginx
 menu: menu
 ----
 
-nginx is a ...
+nginx
+=====
+
+nginx is a small and fast server which generally outperforms most of the alternatives out of the box.
+
+However it can be tuned an awful lot.
+
+General Tuning
+--------------
+
+Tuning for PHP
+--------------
