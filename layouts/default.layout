@@ -10,19 +10,14 @@
    <h1><a href="/">Tweaked.io</a> <span>making your servers fly</span></h1>
  </div>
  <table width="100%">
-  <tr><td width="10%" valign="top">
+  <tr><td width="10%" valign="top" class="left_menu">
 <h2>Menu</h2>
 <!-- tmpl_if name='menu' -->
-<ul>
+<div class="menu_simple"><ul>
   <!-- tmpl_loop name='menu' -->
-
-  <!-- tmpl_if name='bold' -->
-  <li><b><!-- tmpl_var name='name' --></b></li>
-  <!-- tmpl_else -->
-  <li><a href="<!-- tmpl_var name='path' -->"><!-- tmpl_var name='name' --></a></li>
-  <!-- /tmpl_if -->
+  <li><a  <!-- tmpl_if name='bold' -->class="current" <!-- /tmpl_if --> href="<!-- tmpl_var name='path' -->"><!-- tmpl_var name='name' --></a></li>
   <!-- /tmpl_loop -->
-</ul>
+</ul></div>
 <!-- /tmpl_if -->
       </td>
       <td width="80%" valign="top">
