@@ -18,4 +18,4 @@ serve: build
 # Upload the site
 #
 upload: build
-	rsync -vazr output/ s-tweaked@www.steve.org.uk:htdocs/
+	rsync -vazr --delete output/ s-tweaked@www.steve.org.uk:htdocs/
