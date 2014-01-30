@@ -2,7 +2,7 @@
 #
 # Rebuild the site.
 #
-build:
+build: clean
 	templer --force
 
 #
@@ -10,6 +10,9 @@ build:
 #
 clean:
 	rm -rf output
+
+serve: build
+	templer --serve=4433
 
 #
 # Upload the site
