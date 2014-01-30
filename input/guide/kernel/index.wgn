@@ -45,6 +45,8 @@ sysctl -p
 Socket Tuning
 -------------
 
+**TODO**: Explain this.
+
 Append the following to the bottom of `/etc/sysctl.conf`:
 
 <pre class="code">
