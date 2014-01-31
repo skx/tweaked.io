@@ -33,26 +33,26 @@ Installing pdnsd on Debian Systems
 Installation is pretty simple, using the standard `aptitude` command:
 
 <pre class="code">
-aptitude install pdnsd
+# aptitude install pdnsd
 </pre>
 
 Once installed you need to change the "`START_DAEMON=`" setting to be "`yes`" in `/etc/default/pdnsd`, at which point you can start the deamon:
 
 <pre class="code">
-/etc/init.d/pdnsd start
+# /etc/init.d/pdnsd start
 </pre>
 
 Assuming that works you can test the software by performing a lookup, and timing it:
 
 <pre class="code">
-dig -t a example.com @127.0.0.1 | grep time
+$ dig -t a example.com @127.0.0.1 | grep time
 ;; Query time: 29 msec
 </pre>
 
 Repeating that lookup should show the second attempt took zero seconds:
 
 <pre class="code">
-dig -t a example.com @127.0.0.1 | grep time
+$ dig -t a example.com @127.0.0.1 | grep time
 ;; Query time: 0 msec
 </pre>
 

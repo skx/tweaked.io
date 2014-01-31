@@ -20,13 +20,13 @@ The kernel has built-in limits on the number of files that a process can open, a
 You can view the current limit on the number of open-files by running:
 
 <pre class="code">
-cat /proc/sys/fs/file-max
+$ cat /proc/sys/fs/file-max
 </pre>
 
 The limit can be raised interactively by running, as `root`:
 
 <pre class="code">
-sysctl -w fs.file-max=100000
+# sysctl -w fs.file-max=100000
 </pre>
 
 If you wish that change to be made persistently you should append to the file `/etc/sysctl.conf` the line:
@@ -38,7 +38,7 @@ fs.file-max = 100000
 Then run the following command to make your change take effect:
 
 <pre class="code">
-sysctl -p
+# sysctl -p
 </pre>
 
 
@@ -50,20 +50,20 @@ For servers which are handling large numbers of concurent sessions, there are so
 With a large number of clients comnunicating with your server it wouldn't be unusual to have a 20,000 open sockets or more.  To increase that range you append the following to the bottom of `/etc/sysctl.conf`:
 
 <pre class="code">
-   # Use the full range of ports.
-   net.ipv4.ip_local_port_range = 1024 65535
+# Use the full range of ports.
+net.ipv4.ip_local_port_range = 1024 65535
 </pre>
 
 You can also increase the recycling time of sockets, avoiding large numbers of them staying in the `TIME_WAIT` status by adding these values to `/etc/sysctl.conf`:
 
 <pre class="code">
-   # Enables fast recycling of TIME_WAIT sockets.
-   # (Use with caution according to the kernel documentation!)
-   net.ipv4.tcp_tw_recycle = 1
+# Enables fast recycling of TIME_WAIT sockets.
+# (Use with caution according to the kernel documentation!)
+net.ipv4.tcp_tw_recycle = 1
 
-   # Allow reuse of sockets in TIME_WAIT state for new connections
-   # only when it is safe from the network stack’s perspective.
-   net.ipv4.tcp_tw_reuse = 1
+# Allow reuse of sockets in TIME_WAIT state for new connections
+# only when it is safe from the network stack’s perspective.
+net.ipv4.tcp_tw_reuse = 1
 </pre>
 
 Finally one problem you'll find is that if a socket is listening and
@@ -72,20 +72,20 @@ connections in a buffer before failing.  You can tweak several values
 to increase the size of the backlog:
 
 <pre class="code">
-   #
-   # 16MB per socket - which sounds like a lot, but will virtually never
-   # consume that much.
-   #
-   net.core.rmem_max = 16777216
-   net.core.wmem_max = 16777216
+#
+# 16MB per socket - which sounds like a lot, but will virtually never
+# consume that much.
+#
+net.core.rmem_max = 16777216
+net.core.wmem_max = 16777216
 
-   # Increase the number of outstanding syn requests allowed.
-   # c.f. The use of syncookies.
-   net.ipv4.tcp_max_syn_backlog = 4096
-   net.ipv4.tcp_syncookies = 1
+# Increase the number of outstanding syn requests allowed.
+# c.f. The use of syncookies.
+net.ipv4.tcp_max_syn_backlog = 4096
+net.ipv4.tcp_syncookies = 1
 
-   # The maximum number of "backlogged sockets".  Default is 128.
-   net.core.somaxconn = 1024
+# The maximum number of "backlogged sockets".  Default is 128.
+net.core.somaxconn = 1024
 </pre>
 
 The trade-off here is that a connecting client will see a slow connection,
@@ -94,7 +94,7 @@ but this is almost certainly better than a `Connection Refused` error.
 Once you've made those additions you can cause them to be loaded by running:
 
 <pre class="code">
-sysctl -p
+# sysctl -p
 </pre>
 
 Finally if you've changed these limits you will need to restart the associated daemons.  (For example "`service nginx restart`".)

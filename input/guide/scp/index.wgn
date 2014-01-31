@@ -30,7 +30,7 @@ For my personal Debian GNU/Linux machine I see the following ciphers are support
 To choose a particular cipher run:
 
 <pre class="code">
-ssh -o Cipher=arcfour user@host.example.com
+$ ssh -o Cipher=arcfour user@host.example.com
 </pre>
 
 or
@@ -42,7 +42,7 @@ scp -o Cipher=arcfour local-file user@remote.example.com:
 The different ciphers have different performance characteristics, and you can test the timings if you have a large file named `test.img` by repeatedly copying the file to a remote host using a different cipher each time:
 
 <pre class="code">
-for i in aes128-cbc arcfour ; do time scp -o Cipher=$1 test.img user@remote.example.com: ; done
+$ for i in aes128-cbc arcfour ; do time scp -o Cipher=$1 test.img user@remote.example.com: ; done
 </pre>
 
 For my personal systems the following were rough timings:

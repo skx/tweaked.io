@@ -15,7 +15,7 @@ nginx uses a fixed number of workers, each of which handles incoming requests.  
 You can count the CPUs available to your system by running:
 
 <pre class="code">
-grep ^processor /proc/cpuinfo | wc -l
+$ grep ^processor /proc/cpuinfo | wc -l
 </pre>
 
 With a quad-core processor this would give you a configuration that started like so:
