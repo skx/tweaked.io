@@ -36,7 +36,7 @@
 #  1. Clean the site, so we're good.
 #  2. Generate the CSS.
 #
-build: clean input/css/style.css
+build: clean input/css/s.css
 	templer --force
 
 #
