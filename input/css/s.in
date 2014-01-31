@@ -3,7 +3,7 @@ body {
 	padding:0;
 	border:0;			/* This removes the border around the viewport in old versions of IE */
 	width:100%;
-	background:#fff;
+	background:white;
 	min-width:600px;    	/* Minimum width of layout - remove line if not required */
 					/* The min-width property does not work in old versions of Internet Explorer */
 	font-size:90%;
@@ -174,4 +174,48 @@ h3 {
 
 #content ul {
     list-style: none;
+}
+
+#navigation ul
+{
+    list-style-type:none;
+    float:left;
+    display:block;
+    width:100%;
+    clear:both;
+    margin:0px 0px 0px 0px;
+    padding:0px;
+    background-color:#f4f4f4;
+    border-top:1px solid #000000;
+    border-bottom:1px solid #000000;
+}
+
+#navigation ul li
+{
+    display:inline;
+}
+
+#navigation a
+{
+    display:block;
+    float:right;
+    width:100px;
+    padding:10px 0px 10px 0px;
+    margin:0px;
+    text-decoration:none;
+    text-align:center;
+    border-left: 1px solid #f4f4f4;
+    color: red;
+}
+
+#navigation a:visited, #navigation a:link
+{
+    background-color:#f4f4f4;
+    color:black;
+}
+
+#navigation a:active, #navigation a:hover
+{
+    border-left: 1px solid red;
+    color:#000000;
 }

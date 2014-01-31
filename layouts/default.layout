@@ -11,9 +11,17 @@
   <div id="header">
     <h1><a href="/">Tweaked.io</a> <span>making your servers fly</span></h1>
   </div>
+<div id="navigation">
+   <ul>
+     <li <!-- tmpl_if name='contact_page' -->id="selected"<!-- /tmpl_if -->><a href="/contact/">Contact</a></li>
+     <li <!-- tmpl_if name='home_page' -->id="selected"<!-- /tmpl_if -->><a href="/">Home</a></li>
+   </ul>
+</div>
+
+
   <div class="colmask leftmenu">
     <div class="colleft">
-      <div class="col1">
+      <div class="col1" name="content" id="content">
 	<!-- Column 1 start -->
 <!-- tmpl_var name='content' -->
 
