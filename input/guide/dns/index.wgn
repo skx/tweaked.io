@@ -1,0 +1,63 @@
+Title: Caching DNS for server optimization
+menu: menu
+----
+
+
+DNS
+===
+
+DNS is the system which is used to convert human-readable hostnames (such as `example.com`) into the IP addresses that are actually used to contact the services running upon them.
+
+
+Caching DNS
+-----------
+
+If you're running applications that require the lookup of a large number of IP addresses the single best thing you can do is deploy a local DNS-cache.
+
+Many services perform DNS lookups, including webservers and log-analyzing software, and mail-servers.
+
+> **NOTE**: Mail-servers might perform significantly more DNS lookups than you expect if you're using a DNS-based blacklist for rejecting SPAM at submission-time.
+
+One of the simplest DNS dedicated DNS-caches is [pdnsd](http://members.home.nl/p.a.rombouts/pdnsd/), this works in two ways:
+
+* Unknown queries are passed to your "upstream" DNS servers.
+   * i.e. The DNS servers you're already using if you have no cache present.
+* Queries that have been seen before are returned from the cache.
+  * Subject to the usual TTL values.
+
+
+
+Installing pdnsd on Debian Systems
+----------------------------------
+
+Installation is pretty simple, using the standard `aptitude` command:
+
+<pre class="code">
+aptitude install pdnsd
+</pre>
+
+Once installed you need to change the "`START_DAEMON=`" setting to be "`yes`" in `/etc/default/pdnsd`, at which point you can start the deamon:
+
+<pre class="code">
+/etc/init.d/pdnsd start
+</pre>
+
+Assuming that works you can test the software by performing a lookup, and timing it:
+
+<pre class="code">
+dig -t a example.com @127.0.0.1 | grep time
+;; Query time: 29 msec
+</pre>
+
+Repeating that lookup should show the second attempt took zero seconds:
+
+<pre class="code">
+dig -t a example.com @127.0.0.1 | grep time
+;; Query time: 0 msec
+</pre>
+
+If that second query was indeed "instant" then you can switch to using your caching DNS server by updating `/etc/resolv.conf` to refer to it:
+
+<pre class="code">
+nameserver 127.0.0.1
+</pre>
