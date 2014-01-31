@@ -1,0 +1,63 @@
+Title: scp optimized cipher choices
+menu: menu
+----
+
+scp
+===
+
+`scp` is the command-line tool included with the [OpenSSH](http://www.openssh.com/) suite of tools, it is designed to securely transfer files to and from remote hosts.
+
+Compression
+-----------
+
+If you add the following to `~/.ssh/config` your files will be compressed in-transit which will reduce the amount of data which is required to transfer
+
+<pre class="code">
+Host *
+    Compression      yes
+    CompressionLevel 4
+</pre>
+
+Cipher Choices
+--------------
+
+`ssh` and `scp` both support a large number of ciphers, which are used to encrypt your content over the network.  You can see the ciphers enabled in your copy of OpenSSH by running "`man ssh_config`".
+
+For my personal Debian GNU/Linux machine I see the following ciphers are supported:
+
+* 3des-cbc aes128-cbc aes192-cbc aes256-cbc aes128-ctr aes192-ctr aes256-ctr arcfour128 arcfour256 arcfour blowfish-cbc cast128-cbc
+
+To choose a particular cipher run:
+
+<pre class="code">
+ssh -o Cipher=arcfour user@host.example.com
+</pre>
+
+or
+
+<pre class="code">
+scp -o Cipher=arcfour local-file user@remote.example.com:
+</pre>
+
+The different ciphers have different performance characteristics, and you can test the timings if you have a large file named `test.img` by repeatedly copying the file to a remote host using a different cipher each time:
+
+<pre class="code">
+for i in aes128-cbc arcfour ; do time scp -o Cipher=$1 test.img user@remote.example.com: ; done
+</pre>
+
+For my personal systems the following were rough timings:
+
+* `3des-cbc` 45.48 seconds.
+* `aes128-cbc` 45.39 seconds.
+* `aes192-cbc` 45.01 seconds.
+* `aes256-cbc` 45.50 seconds.
+* `aes128-ctr` 45.29 seconds.
+* `aes192-ctr` 44.40 seconds.
+* `aes256-ctr` 45.88 seconds.
+* `arcfour128` 45.29 seconds.
+* `arcfour256` 45.94 seconds.
+* `arcfour` 42.32 seconds.
+* `blowfish-cbc` 46.02 seconds.
+* `cast128-cbc` 47.07 seconds.
+
+So for my particular setup it seems that `arcfour` is the fastest cipher to choose.   (For reference disabling compression increased the time to transfer my sample file to over 30 minutes!)
