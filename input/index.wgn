@@ -2,13 +2,8 @@ Title: Making your servers fly
 menu: menu
 ----
 
-This site is dedicated towards server-optimization:
+This site is dedicated to holding information on tweaking, tuning, and optimizing your server-software:
 
-* Tuning software to perform well, at scale.
-* Tuning software to handle as much traffic as you can receive.
+Your server should be able to handle _all the traffic_.
 
-I've been involved with system administration for many years now,
-both privately and professionally.
-
-I hope the resourecs, recipes, and suggestions here will be useful to others.
-
+Currently the site is in the early stages of its life, but we've already documented many ways of [tuning nginx](/guide/nginx), along with the minimum of details required to improve the GNU/Linux kernels setup.
