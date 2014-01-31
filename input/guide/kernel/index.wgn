@@ -10,7 +10,6 @@ Linux is the world-leading open-source kernel.
 
 It is designed to peform well on a wide range of hardware.
 
-
 File Handle Limits
 ------------------
 
@@ -99,6 +98,67 @@ Once you've made those additions you can cause them to be loaded by running:
 </pre>
 
 Finally if you've changed these limits you will need to restart the associated daemons.  (For example "`service nginx restart`".)
+
+Process Scheduler
+-----------------
+If you're running a recent ( newer than approx 2.6.32) you've got the
+'Completely Fair Scheduler' (CFS) For modern systems serving lots of
+connections on lots of cores, you may hit issues with process migration.
+
+There's a kernel parameter that determines how long a migrated process has to
+be running before the kernel will consider migrating it again to another core.
+The sysctl name is `sched_migration_cost_ns`, default value 50000 (that's ns so
+0.5 ms):
+
+<pre class="code">
+$ cat /proc/sys/kernel/sched_migration_cost_ns
+</pre>
+
+(It was renamed from sched_migration_cost at some point between 3.5 and 3.8)
+
+Forking servers, like PostgreSQL or Apache, scale to much higher levels of
+concurrent connections if this is made larger, by at least an order of
+magnitude:
+
+The limit can be raised interactively by running, as `root`:
+
+<pre class="code">
+# sysctl -w kernel.sched_migration_cost_ns=5000000
+</pre>
+
+If you wish that change to be made persistently you should append to the file `/etc/sysctl.conf` the line:
+
+<pre class="code">
+kernel.sched_migration_cost_ns = 5000000
+</pre>
+
+Another parameter that can dramatically impact forking servers is
+`sched_autogroup_enabled`. This setting groups tasks by TTY, to improve
+perceived responsiveness on an interactive system. On a server with a long
+running forking daemon, this will tend to keep child processes from migrating
+away as soon as they should. It can be disabled like so:
+
+<pre class="code">
+# sysctl -w kernel.sched_autogroup_enabled=0
+</pre>
+
+Various PostgreSQL users have reported (on the postgresql performance mailing
+list) gains up to 30% on highly concurrent workloads on multi-core systems.
+
+If you wish that change to be made persistently you should append to the file `/etc/sysctl.conf` the line:
+
+<pre class="code">
+kernel.sched_autogroup_enabled = 0
+</pre>
+
+
+Then run the following command to make your change take effect:
+
+<pre class="code">
+# sysctl -p
+</pre>
+
+
 
 
 Filesystem Tuning
