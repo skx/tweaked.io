@@ -2,8 +2,18 @@ Title: Making your servers fly
 menu: menu
 ----
 
+Service and Server Optimization
+===============================
+
 This site is dedicated to holding information on tweaking, tuning, and optimizing your server-software:
 
 Your server should be able to handle _all the traffic_.
 
 Currently the site is in the early stages of its life, but we've already documented many ways of [tuning nginx](/guide/nginx), along with the minimum of details required to improve the GNU/Linux kernels setup.
+
+Contributing Updates
+--------------------
+
+If you'd like to contribute updates, or cover additional services, or servers, then please do [drop me an mail](mailto:steve@tweaked.io).
+
+The source for this site is [available on github](https://github.com/skx/tweaked.io/) if you'd prefer to contribute there.
