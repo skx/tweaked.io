@@ -3,6 +3,9 @@
    <title>Optimizing servers<!-- tmpl_if name='title' --> - <!-- tmpl_var name='title' --><!-- tmpl_else -->: Tweaked.io<!-- /tmpl_if --></title>
    <link rel="stylesheet" type="text/css"  href="/css/style.css" />
    <link rel="icon" href="/favicon.ico" />
+<!-- tmpl_if name='refresh' -->
+   <meta http-equiv="refresh" content="0;<!-- tmpl_var name='refresh' -->">
+<!-- /tmpl_if -->
  </head>
  <body>
 
