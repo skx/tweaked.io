@@ -1,45 +1,48 @@
-<html>
- <head>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB">
+<head>
    <title>Optimizing servers<!-- tmpl_if name='title' --> - <!-- tmpl_var name='title' --><!-- tmpl_else -->: Tweaked.io<!-- /tmpl_if --></title>
-   <link rel="stylesheet" type="text/css"  href="/css/style.css" />
-   <link rel="icon" href="/favicon.ico" />
-<!-- tmpl_if name='refresh' -->
-   <meta http-equiv="refresh" content="0;<!-- tmpl_var name='refresh' -->">
-<!-- /tmpl_if -->
- </head>
- <body>
+   <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
+   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+   <link rel="stylesheet" type="text/css" href="/css/s.css" media="screen" />
+</head>
+<body>
 
- <div id="header">
-   <h1><a href="/">Tweaked.io</a> <span>making your servers fly</span></h1>
- </div>
- <table width="100%">
-  <tr><td width="10%" valign="top" class="left_menu">
-<h2>Optimizing</h2>
-<!-- tmpl_if name='menu' -->
-<div class="menu_simple"><ul>
-  <!-- tmpl_loop name='menu' -->
-  <li><a  <!-- tmpl_if name='bold' -->class="current" <!-- /tmpl_if --> href="<!-- tmpl_var name='path' -->"><!-- tmpl_var name='name' --></a></li>
-  <!-- /tmpl_loop -->
-</ul></div>
-<!-- /tmpl_if -->
-
-<h2>Measuring</h2>
-<div class="menu_simple"><ul>
-<ul>
-<li><a href="/benchmarking/">Benchmarking</a></li>
-</ul>
-</div>
-      </td>
-      <td width="80%" valign="top" id="content">
+  <div id="header">
+    <h1><a href="/">Tweaked.io</a> <span>making your servers fly</span></h1>
+  </div>
+  <div class="colmask leftmenu">
+    <div class="colleft">
+      <div class="col1">
+	<!-- Column 1 start -->
 <!-- tmpl_var name='content' -->
-      </td>
-      <td width="10%" valign="top">
-       <p>&nbsp;&nbsp;</p>
-       </td>
-       </tr>
- </table>
-<div id="footer">
-<p>&copy 2014 - <a href="http://steve.org.uk/">Steve Kemp</a></p>
-</div>
+	<!-- Column 1 end -->
+      </div>
+      <div class="col2">
+	<!-- Column 2 start -->
+        <h2>Optimizing</h2>
+        <!-- tmpl_if name='menu' -->
+        <div class="menu_simple">
+          <ul>
+            <!-- tmpl_loop name='menu' -->
+            <li><a  <!-- tmpl_if name='bold' -->class="current" <!-- /tmpl_if --> href="<!-- tmpl_var name='path' -->"><!-- tmpl_var name='name' --></a></li>
+            <!-- /tmpl_loop -->
+          </ul>
+        </div>
+        <!-- /tmpl_if -->
+
+        <h2>Measuring</h2>
+        <div class="menu_simple">
+          <ul>
+            <li><a href="/benchmarking/">Benchmarking</a></li>
+          </ul>
+        </div>
+        <!-- Column 2 end -->
+      </div>
+    </div>
+  </div>
+  <div id="footer">
+    <p>&copy 2014 - <a href="http://steve.org.uk/">Steve Kemp</a></p>
+  </div>
 </body>
 </html>

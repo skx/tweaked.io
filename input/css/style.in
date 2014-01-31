@@ -1,14 +1,105 @@
 body {
-    background-color: #fefeff;
+	margin:0;
+	padding:0;
+	border:0;			/* This removes the border around the viewport in old versions of IE */
+	width:100%;
+	background:#fff;
+	min-width:600px;    	/* Minimum width of layout - remove line if not required */
+					/* The min-width property does not work in old versions of Internet Explorer */
+	font-size:90%;
+}
+a {
+	color:#369;
+}
+a:hover {
+	color:red;
+	text-decoration:none;
+}
+h1, h2, h3 {
+	margin:.8em 0 .2em 0;
+	padding:0;
+}
+p {
+	margin:.4em 0 .8em 0;
+	padding:0;
+}
+img {
+	margin:10px 0 5px;
+}
+#ads img {
+	display:block;
+	padding-top:10px;
 }
 
-td {
-    padding: 7px;
+/* 'widths' sub menu */
+#layoutdims {
+	clear:both;
+	background:#eee;
+	border-top:4px solid #000;
+	margin:0;
+	padding:6px 15px !important;
+	text-align:right;
 }
+/* column container */
+.colmask {
+	position:relative;	/* This fixes the IE7 overflow hidden bug */
+	clear:both;
+	float:left;
+	width:100%;			/* width of whole page */
+	overflow:hidden;		/* This chops off any overhanging divs */
+}
+/* common column settings */
+.colright,
+.colmid,
+.colleft {
+	float:left;
+	width:100%;
+	position:relative;
+}
+.col1,
+.col2,
+.col3 {
+	float:left;
+	position:relative;
+	padding:0 0 1em 0;
+	overflow:hidden;
+}
+/* 2 Column (left menu) settings */
+.leftmenu {
+	background:#f4f4f4;	/* left column background colour */
+}
+.leftmenu .colleft {
+	right:75%;			/* right column width */
+	background:#f4f4f4;	/* left column background colour */
+}
+.leftmenu .col1 {
+	width:71%;			/* right column content width */
+	left:102%;			/* 100% plus left column left padding */
+}
+.leftmenu .col2 {
+	width:21%;			/* left column content width (column width minus left and right padding) */
+	left:6%;			/* (right column left and right padding) plus (left column left padding) */
+}
+/* Footer styles */
+#footer {
+	clear:both;
+	float:left;
+        text-align: right;
+	width:100%;
+	border-top:1px solid #000;
+}
+#footer p {
+	padding:10px;
+	margin:0;
+}
+
+
 #header {
     padding-top: 5px;
     text-align: center;
     padding-bottom: 5px;
+    background:#f4f4f4;	/* left column background colour */
+
 }
 
 #header h1 a {
@@ -21,15 +112,11 @@ td {
     font-size: 0.8em;
 }
 
-#footer {
-    padding: 5px;
-    text-align: right;
-}
+
 
 .menu_simple ul {
     margin: 0;
     padding: 0;
-    width:185px;
     list-style-type: none;
 }
 
@@ -37,18 +124,21 @@ td {
     text-decoration: none;
     color: black;
     padding: 10.5px 11px;
-    background-color: #fefefe;
+    background-colour:#f4f4f4;
     display:block;
-    border-left: 1px solid #fefefe;
-    border-bottom: 1px solid #fefefe;
+    border-right: 1px solid #f4f4f4;
+    border-bottom: 1px solid #f4f4f4;
 }
 
 .menu_simple ul li a:visited {
     color: black;
 }
 
-.menu_simple ul li a:hover, .menu_simple ul li a.current {
-    color: black;
+.menu_simple ul li a:hover {
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+}
+.menu_simple ul li a.current {
     border-left: 1px solid black;
 }
 
