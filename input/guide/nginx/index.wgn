@@ -10,7 +10,7 @@ nginx
 General Tuning
 --------------
 
-nginx uses a fixed number of workers, each of which handles incoming requests.  The general rule of thumb is that you should have one worker for each CPU-core you have.
+nginx uses a fixed number of workers, each of which handles incoming requests.  The general rule of thumb is that you should have one worker for each CPU-core your server contains.
 
 You can count the CPUs available to your system by running:
 
@@ -30,13 +30,22 @@ events {
 }
 
 worker_rlimit_nofile 40000;
+
+http {
+    sendfile           on;
+    tcp_nopush         on;
+    tcp_nodelay        on;
+    keepalive_timeout  15;
+
+    # Your content here ..
+}
 </pre>
 
 Here we've also raised the `worker_connections` setting, which specifies how many connections each worker process can handle.
 
-The total maximum number of connections your server can process is the result of:
+The maximum number of connections your server can process is the result of:
 
-* worker_processes * worker_connections (= 32384 in our example).
+* `worker_processes` * `worker_connections` (= 32384 in our example).
 
 We've enabled `multi_accept` which causes nginx to attempt to immediately accept as many connections as it can, subject to [the kernel socket setup](/guide/kernel/).
 
@@ -47,9 +56,9 @@ Compression
 
 One of the first things that many people try to do is to enable the `gzip` compression module available with nginx.  The intention here is that the objects which the server sends to requesting clients will be smaller, and thus faster to send.
 
-However this involves the trade-off common to tuning - performing the compression takes CPU resources from your server, which frequnetly means that you'd be better off not enabling it at all.
+However this involves the trade-off common to tuning, performing the compression takes CPU resources from your server, which frequently means that you'd be better off not enabling it at all.
 
-The best approach with compression is to only enable compression for large files, and to avoid compressing things that are unlikely to be shrunk (such as images, executables, and similar binary files).
+Generally the best approach with compression is to only enable it for large files, and to avoid compressing things that are unlikely to be reduced in size (such as images, executables, and similar binary files).
 
 With that in mind the following is a sensible configuration:
 
@@ -64,6 +73,26 @@ gzip_disable "MSIE [1-6]\.";
 
 
 This enables compression for files that are over 10k, aren't being requested by early versions of Microsoft's Internet Explorer, and only attempts to compress text-based files.
+
+
+Client Caching
+--------------
+
+A simple way of avoiding your server handling requests is if remote clients
+beleive their content is already up-to-date.
+
+To do this you want to set suitable cache-friendly headers, and a simple way of  doing that is to declare that all images, etc, are fixed for a given period of time:
+
+<pre class="code">
+     location ~* \.(jpg|jpeg|gif|png|css|js|ico|xml)$ {
+         access_log        off;
+         log_not_found     off;
+         expires           30d;
+     }
+</pre>
+
+Here we've disabled logging of media-files, and configured several suffixes which will be considered valid (and thus not re-fetched) for 30 days.  You might want to adjust the period if you're editing your CSS files frequently.
+
 
 
 Filehandle Cache
@@ -93,11 +122,56 @@ The net result should be that frequently accessed files have handles cached for 
 Tuning for PHP
 --------------
 
-* **TODO**
+Many sites involve the use of PHP, for example any site built around [wordpress](http://www.wordpress.org/).
 
+As there is no native `mod_php` for nginx the recommended way to run PHP applications involves the use of [PHP-FPM](http://php-fpm.org/).  To use PHP-FPM you essentially proxy requests for PHP files as follows:
+
+<pre class="code">
+        # execute all .php files via php-fpm
+        location ~ .php$ {
+            fastcgi_pass   127.0.0.1:9000;
+            fastcgi_index  index.php;
+
+            fastcgi_param   SCRIPT_FILENAME    $document_root$fastcgi_script_name;
+            fastcgi_param   SCRIPT_NAME        $fastcgi_script_name;
+
+            fastcgi_buffer_size 128k;
+            fastcgi_buffers 256 16k;
+            fastcgi_busy_buffers_size 256k;
+            fastcgi_temp_file_write_size 256k;
+
+            # This file is present on Debian systems..
+            include fastcgi_params;
+        }
+</pre>
+
+By default PHP-FPM will start a number of dedicated workers, each running an instance of PHP.  If you're not swamped for memory you can increase the number of workers to increase concurrent-throughput.
+
+Edit the file `/etc/php5/fpm/pool.d/www.conf` to change the number of children:
+
+<pre class="code">
+; set a fixed number of php workers
+pm = static
+
+; start up 32 php processes
+pm.max_children = 32
+</pre>
+
+Finally you can configure PHP-FPM to restart automatically, if there are problems.  In this example we restart if ten child processes die within 1 minute, and we allow 10 seconds to pass before that happens.
+
+This is a global configuration and belongs in `/etc/php5/fpm/php-fpm.conf`:
+
+<pre class="code">
+emergency_restart_threshold 10
+emergency_restart_interval 1m
+process_control_timeout 10s
+</pre>
+
+**TIP**: You might consider the use of the APC cache, which will cache parsed versions of your PHP-files.  This should provide a speedup, even in a PHP-FPM setup.
 
 Alternatives
 ------------
+
 
 When you've reached the very limit of nginx performance you might consider using the [Varnish Cache](http://varnish-cache.org) as a reverse-proxy in front of nginx.
 
