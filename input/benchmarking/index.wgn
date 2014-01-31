@@ -1,0 +1,107 @@
+Title: Measuring Performance
+menu: menu
+----
+
+
+Measuring Performance
+=====================
+
+Whenever you attempt to make a tweak to your systems performance you need to know what result you've achieved, if any.
+
+The best way to do that is to use a tool to test your servers performance, or throughput, and run that both before and after making any particular change.
+
+There are several benchmarking applications and tools out there, and this small page contains a list of the ones you're most likely to need to use.
+
+
+
+Webserver Stress-Testing
+------------------------
+
+Webserver benchmarking largely consists of firing off a few thousand requests at a server, and reporting on the min/max/average response time.
+
+Obviously a server "loses points" if some of the response are errors, rather than valid results, but generally the testing is a matter of juggling the number of total requests, or concurrent requests, until you reach a point where the server starts to take too long to respond, or fails completely.
+
+### ab
+
+One of the most popular tools for benchmarking for many years was the `ab`, the Apache benchmark tool.  This is looking a little dated now, but still works well.
+
+If you're running Apache you probably have this installed already, which explains its popularity.  Give it a URL, a number of requests, and a concurrency level and it will issue a small report:
+
+<pre class="code">
+ab -c 10 -n 1000 http://example.com/
+</pre>
+
+The example above fired 1000 requests, with 10 at a time, to the URL http://example.com/ and the results for me look something like this:
+
+<pre class="code">
+Concurrency Level:      10
+Time taken for tests:   36.496 seconds
+Complete requests:      1000
+Failed requests:        0
+Write errors:           0
+Total transferred:      1610000 bytes
+HTML transferred:       1270000 bytes
+Requests per second:    27.40 [#/sec] (mean)
+Time per request:       364.955 [ms] (mean)
+Time per request:       36.496 [ms] (mean, across all concurrent requests)
+Transfer rate:          43.08 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:      179  182   1.3    182     192
+Processing:   182  183   1.2    182     195
+Waiting:      181  183   1.2    182     195
+Total:        361  364   1.9    364     383
+</pre>
+
+### siege
+
+Siege is very similar to the Apache benchmark application, and allows you
+to request a lot of URLs from a text-file, along with other options.
+
+A simple example might be to test a server with 50 concurrent users, and a delay of a random amount, up to 10 seconds, between requests:
+
+<pre class="code">
+siege -d10 -c50 -t60s http://example.com/
+</pre>
+
+The use of `-t60s` will cause the testing to cease after a minute.  If you were testing a large site you will probably wish to run for a lot longer.
+
+Perhaps a more realistic approach is to save a list of URLs to the file `~/urls.txt`, and fire requests from that file, randomly:
+
+<pre class="code">
+siege -d10 -c50 -t60s -i -f ~/urls.txt
+</pre>
+
+In either case we'd expect to see output like this:
+
+<pre class="code">
+Transactions:		         442 hits
+Availability:		      100.00 %
+Elapsed time:		       59.43 secs
+Data transferred:	        0.54 MB
+Response time:		        0.37 secs
+Transaction rate:	        7.44 trans/sec
+Throughput:		        0.01 MB/sec
+Concurrency:		        2.72
+Successful transactions:         442
+Failed transactions:	           0
+Longest transaction:	        0.40
+Shortest transaction:	        0.36
+</pre>
+
+
+### Online services
+
+There are several online testing sites which you can use to graph your server response time, these should have the advantage that you're not limited by your personal upload-speed.
+
+As many require subscriptions, or validation, they're not suitable for all, but as an alternative to testing yourself they can be useful:
+
+* [http://blitz.io/](http://blitz.io/)
+* [http://loader.io/](http://loader.io/)
+
+Simpler testing will just test a single page and report the time taken to load all associated resources (CSS, images, etc).  Not quite as valuable, but interesting nonetheless:
+
+* [http://developers.google.com/speed/pagespeed/insights/](http://developers.google.com/speed/pagespeed/insights/)
+* [http://gtmetrix.com/](http://gtmetrix.com/)
+* [http://www.webpagetest.org/](http://www.webpagetest.org/)
