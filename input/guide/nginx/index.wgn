@@ -102,7 +102,7 @@ Filehandle Cache
 If you're serving a large number of static files you'll benefit from keeping
 filehandles to requested files open - this avoids the need to reopen them in the future.
 
-**NOTE**: You should only run with this enabled if you're not editing the files at the time you're serving them.  Because file accesses are cached any 404s will be cached too, similarly file-sizes will be cached, and if you change them your served content will be out of date.
+>> **NOTE**: You should only run with this enabled if you're not editing the files at the time you're serving them.  Because file accesses are cached any 404s will be cached too, similarly file-sizes will be cached, and if you change them your served content will be out of date.
 
 The following is a good example, which can be placed in either the `server` section of your nginx config, or within the main `http` block:
 
@@ -168,7 +168,7 @@ emergency_restart_interval 1m
 process_control_timeout 10s
 </pre>
 
-**TIP**: You might consider the use of the APC cache, which will cache parsed versions of your PHP-files.  This should provide a speedup, even in a PHP-FPM setup.
+>> **TIP**: You might consider the use of the APC cache, which will cache parsed versions of your PHP-files.  This should provide a speedup, even in a PHP-FPM setup.
 
 Alternatives
 ------------
