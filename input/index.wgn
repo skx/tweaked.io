@@ -9,7 +9,14 @@ This site is dedicated to holding information on tweaking, tuning, and optimizin
 
 Your server should be able to handle _all the traffic_.
 
-Currently the site is in the early stages of its life, but we've already documented many ways of [tuning nginx](/guide/nginx), along with the minimum of details required to improve the GNU/Linux kernels setup.
+Currently the site is in the early stages of its life, but we've already documented many ways of [tuning nginx](/guide/nginx/), along with the minimum of details required to improve the GNU/Linux kernels setup.
+
+Expect future updates to include:
+
+* Apache 2.x.
+* Squid.
+* GlusterFS.
+* and more!
 
 Contributing Updates
 --------------------
