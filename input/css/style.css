@@ -77,3 +77,13 @@ h2 {
     width: 100%;
     border-bottom: 1px solid black;
 }
+
+h3 {
+    margin-top: 2em;
+    width: 100%;
+    border-bottom: 1px dashed black;
+}
+
+#content ul {
+    list-style: none;
+}
