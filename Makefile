@@ -1,8 +1,15 @@
 
 #
+# A rule for compressing the CSS
+#
+%.css : %.in
+	@test -e /usr/share/pyshared/slimmer/slimmer.py || echo "apt-get install python-slimmer"
+	@python /usr/share/pyshared/slimmer/slimmer.py $< css --output=$@
+
+#
 # Rebuild the site.
 #
-build: clean
+build: clean input/css/style.css
 	templer --force
 
 #
