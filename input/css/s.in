@@ -126,20 +126,18 @@ img {
     padding: 10.5px 11px;
     background-colour:#f4f4f4;
     display:block;
-    border-right: 1px solid #f4f4f4;
-    border-bottom: 1px solid #f4f4f4;
+    border-left: 1px solid #f4f4f4;
 }
 
 .menu_simple ul li a:visited {
     color: black;
 }
 
-.menu_simple ul li a:hover {
-    border-right: 1px solid black;
-    border-bottom: 1px solid black;
-}
 .menu_simple ul li a.current {
     border-left: 1px solid black;
+}
+.menu_simple ul li a:hover {
+    border-left: 1px solid red !important;
 }
 
 .code {
