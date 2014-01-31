@@ -1,0 +1,97 @@
+Title: NFS speedup &amp; optimization guide
+menu: menu
+----
+
+NFS
+===
+
+[NFS](http://en.wikipedia.org/wiki/Network_File_System) is the Network File System, which allows files located upon a remote system to be accessed as if they were local, with only a few caveats, (such as locking).
+
+Although there are more complex and featureful remote filesystems available these days NFS has been in use for such a long time it is something you're bound to experience sooner or later.
+
+
+NFS-Server Kernel Processes
+---------------------------
+
+When the [nfs-kernel-server](http://packages.debian.org/nfs-kernel-server) process starts a number of children are spawned to handle incoming requests.
+
+If you edit the file `/etc/default/nfs-kernel-server` you can change the number of children from the default to a higher number, which will allow more connections to be handled:
+
+<pre class="code">
+# Number of servers to start up
+RPCNFSDCOUNT=8
+</pre>
+
+Once you make that change you can reload the server:
+
+<pre class="code">
+# /etc/init.d/nfs-kernel-server reload
+</pre>
+
+
+
+
+Synchronous vs. Asynchronous Writing
+------------------------------------
+
+There are two different ways of mounting NFS:
+
+* Synchronously
+   * Write operations block until they've completed.
+* Asynchronously
+   * Write operations return once they've been received.
+
+The former method is the safest and most reliable, but the other method
+is faster.  If you're prepared to accept the (minor) risk of write operations
+being lost then you should mount asynchronously.
+
+To specify this just add the `sync` or `async` flags to your mount options:
+
+<pre class="code">
+# mount precious:/tmp /mnt -o sync
+</pre>
+
+<pre class="code">
+# mount precious:/tmp /mnt -o async
+</pre>
+
+
+Network Buffer Sizes
+--------------------
+
+When you have an filesystem mounted you can view the mount details to view the size of the network buffers used for reading and writing to the remote server.
+
+Simply run:
+
+<pre class="code">
+root@shelob:~# grep "nfs " /proc/mounts
+precious:/tmp /mnt nfs rw,relatime,vers=3,<b>rsize=524288</b>,<b>wsize=524288</b>,namlen=255,...
+</pre>
+
+The two highlighted entres contain the read and write-buffer sizes, respectively.  Here you see they're in the order of 500k each.
+
+These buffer-sizes can be specified explicity when mounting the filesystem, if the defaults are low for your current-kernel:
+
+<pre class="code">
+# mount precious:/tmp  /mnt -o rsize=65536,wsize=65536
+</pre>
+
+>> **NOTE**: The maximum value is limited depending on the kernels on each side.
+
+
+
+Modifying MTU Size for NFS
+--------------------------
+
+MTU stands for Maximum Transmission Unit, and it is the largest amount of data that can be passed in one Ethernet frame.
+
+Typically an MTU will be set to 1500, because raising this can cause problems wiht routers and similar devices.  If you're on a modern LAN though you can increase the size to allow more data to be transmitted per-frame.
+
+You can see your MTU size in the output of the "`ip link show eth0`" command, and set it via:
+
+<pre class="code">
+# ip link set dev eth0 mtu 5000
+</pre>
+
+Having a large value will almost certainly cause you issues routing outside your network - but within a LAN you should be OK with the change.
+
