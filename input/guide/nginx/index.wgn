@@ -87,9 +87,9 @@ Client Caching
 --------------
 
 A simple way of avoiding your server handling requests is if remote clients
-beleive their content is already up-to-date.
+believe their content is already up-to-date.
 
-To do this you want to set suitable cache-friendly headers, and a simple way of  doing that is to declare that all images, etc, are fixed for a given period of time:
+To do this you want to set suitable cache-friendly headers, and a simple way of doing that is to declare that all images, etc, are fixed for a given period of time:
 
 <pre class="code">
      location ~* \.(jpg|jpeg|gif|png|css|js|ico|xml)$ {
