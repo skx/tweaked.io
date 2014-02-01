@@ -52,7 +52,7 @@ sub expand_variables
         {
 
             #
-            # Skip the general-page
+            # Skip the general-page, and the considerations page.
             #
             next if ( $section =~ /general/i );
 
@@ -70,6 +70,12 @@ sub expand_variables
             $section = File::Basename::basename($section);
 
             #
+            #  Make a pretty name
+            #
+            my $name = $section;
+            $name =~ s/^\d+-//g;
+
+            #
             #  Bold if this page is the current-page.
             #
             my $bold = undef;
@@ -79,7 +85,7 @@ sub expand_variables
             #  Save the page in the loop available to the layout.
             #
             push( @$menu,
-                  {  name => $section,
+                  {  name => $name,
                      path => "/guide/$section/",
                      bold => $bold
                   } );
