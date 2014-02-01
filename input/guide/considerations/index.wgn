@@ -1,0 +1,42 @@
+Title: Considerations
+menu: menu
+----
+
+Considerations
+==============
+
+Although it is often possible to improve the responsiveness of your servers
+and services you should make sure you regularly [test your server](/benchmarking) under load to ensure they contain to function as you expect.
+
+In most of the recipes we have posted we've listed suggested values for settings
+such as `max_connections`.  These are just guidelines that work well on reasonably powered servers.
+
+You might find that because a single connection requires, for example, 10Mb of RAM, you can only sustain 500 of these at the same time before your system is out of resources.
+
+You need to find this limit for yourself, and adjust accordingly.
+
+RAM Exhausion
+-------------
+
+Optimization is about more than just increasing all the server limits,
+if you're not careful you can configure your server to such an extent
+that it runs out of free RAM, which can result in a server failing completely.
+
+An important consideration is thus not raising the limits all the way to
+the maximum possible, but instead raising them to levels your particular
+server can handle.
+
+Mitigating Service Failures
+---------------------------
+
+Even if things are working well it is helpful to install some kind of
+process monitoring upon your servers.
+
+These will catch the case when your servers exit unexpectedly and
+quickly restart them.
+
+There are many tools you can consider using such as `monit`, or `runit`,
+each suited to a different kind of control:
+
+* Restarting services when they fail.
+* Restarting services which have exited.
