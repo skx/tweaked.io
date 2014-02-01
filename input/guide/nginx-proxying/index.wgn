@@ -17,7 +17,7 @@ In addition to operating as a web-server `nginx` can also be used as reverse HTT
 General Tuning
 --------------
 
-As with using `nginx` as a webserver the initial tuning step is to ensure that you have one work per CPU-core on your system, and suitably high number of worker_connections.
+As with using `nginx` as a webserver the initial tuning step is to ensure that you have one worker per CPU-core on your system, and suitably high number of worker_connections.
 
 When `nginx` is working as a reverse proxy there will be two connections used up by every client:
 
@@ -27,7 +27,7 @@ When `nginx` is working as a reverse proxy there will be two connections used up
 Assuming you have two CPU cores, which you can validate by running:
 
 <pre class="code">
-$ grep ^proces /proc/cpuinfo  | wc -l
+$ grep ^proces /proc/cpuinfo | wc -l
 2
 </pre>
 
@@ -111,9 +111,9 @@ as soon as it is received from the back-end.
 The maximum size of the data that nginx can receive from the server at a time is set by the proxy_buffer_size directive.
 
 <pre class="code">
-proxy_buffering off;
-proxy_buffer_size 128k;
-proxy_buffers 100 128k;
+proxy_buffering    off;
+proxy_buffer_size  128k;
+proxy_buffers 100  128k;
 </pre>
 
 
@@ -162,4 +162,4 @@ proxy_cache_valid  200 301 302 30m;
 
 Anything that doesn't response with a "`HTTP (200|301|302) OK`" is not cached.
 
-For a system, such as wordpress, we'd have to deal with cookies, and cache expiration, but by caching only static resources we're avoiding that issue here.
+For an application, such as wordpress, we'd have to deal with cookies, and cache expiration, but by caching only static resources we're avoiding that issue here.
