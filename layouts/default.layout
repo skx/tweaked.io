@@ -56,7 +56,7 @@
         <h2>Measuring</h2>
         <div class="menu_simple">
           <ul>
-            <li><a href="/benchmarking/">Benchmarking</a></li>
+            <li><a  <!-- tmpl_if name='benchmarking' -->class="current" <!-- /tmpl_if -->  href="/benchmarking/">Benchmarking</a></li>
           </ul>
         </div>
         <!-- Column 2 end -->
