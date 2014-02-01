@@ -137,7 +137,8 @@ As there is no native `mod_php` for nginx the recommended way to run PHP applica
 <pre class="code">
         # execute all .php files via php-fpm
         location ~ .php$ {
-            fastcgi_pass   127.0.0.1:9000;
+            # connect to a unix domain-socket:
+            fastcgi_pass   unix:/var/run/php5-fpm.sock;
             fastcgi_index  index.php;
 
             fastcgi_param   SCRIPT_FILENAME    $document_root$fastcgi_script_name;
@@ -153,6 +154,14 @@ As there is no native `mod_php` for nginx the recommended way to run PHP applica
         }
 </pre>
 
+Notice that this uses a Unix domain-socket to connect to FPM, so you need to ensure that you change `/etc/php5/fpm/pool.d/www.conf` to read:
+
+<pre class="code">
+listen = /var/run/php5-fpm.sock
+</pre>
+
+This ensures that FPM will listen on a domain socket, rather than the default of listening on a network-socket (the default is "`listen=127.0.0.1:9000`").
+
 By default PHP-FPM will start a number of dedicated workers, each running an instance of PHP.  If you're not swamped for memory you can increase the number of workers to increase concurrent-throughput.
 
 Edit the file `/etc/php5/fpm/pool.d/www.conf` to change the number of children:
@@ -161,9 +170,12 @@ Edit the file `/etc/php5/fpm/pool.d/www.conf` to change the number of children:
 ; set a fixed number of php workers
 pm = static
 
-; start up 32 php processes
-pm.max_children = 32
+; start up 12 php processes
+pm.max_children = 12
 </pre>
+
+This is an example setting, of the kind we mention in the [considerations](benchmarking/considerations/) section - the value of 12 is just an example, which you will need to test under-load to see if it is reasonable for _your_ particular setup.
+
 
 Finally you can configure PHP-FPM to restart automatically, if there are problems.  In this example we restart if ten child processes die within 1 minute, and we allow 10 seconds to pass before that happens.
 
