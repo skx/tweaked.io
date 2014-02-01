@@ -32,19 +32,34 @@ sub expand_variables
 
     foreach my $key ( keys %hash )
     {
-        my $value = $hash{$key};
+        my $value = $hash{ $key };
 
         #
         # Ignore non-menu keys in this plugin
         #
-        next unless( $key =~ /menu/i  && $value =~ /menu/i );
+        next unless ( $key =~ /menu/i && $value =~ /menu/i );
         my $menu = undef;
 
-        my $input = $data->{"input"};
+        #
+        # Find the location of our input-tree.
+        #
+        my $input = $data->{ "input" };
+
+        #
+        # Find all sections beneath /input/guide/
+        #
         foreach my $section ( sort( glob( $input . "/guide/*/" ) ) )
         {
+
             #
-            #  Get the path to "this page" input.
+            # Skip the general-page
+            #
+            next if ( $section =~ /general/i );
+
+            #
+            #  Get the path to the current page being processed.
+            #
+            #  (We want to set "id=current" on this page, to style it.)
             #
             my $pPath = $page->source();
 
@@ -52,7 +67,7 @@ sub expand_variables
             #  Work out the short-name of this section.
             #
             $section =~ s/\/$//g;
-            $section = File::Basename::basename( $section );
+            $section = File::Basename::basename($section);
 
             #
             #  Bold if this page is the current-page.
@@ -60,9 +75,14 @@ sub expand_variables
             my $bold = undef;
             $bold = 1 if ( $pPath =~ /\/$section\// );
 
-            push( @$menu, { name => $section,
-                            path => "/guide/$section/",
-                          bold => $bold } );
+            #
+            #  Save the page in the loop available to the layout.
+            #
+            push( @$menu,
+                  {  name => $section,
+                     path => "/guide/$section/",
+                     bold => $bold
+                  } );
         }
 
         #
