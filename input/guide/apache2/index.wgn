@@ -1,0 +1,83 @@
+Title: Apache2 speedup &amp; optimization guide
+menu: menu
+show_advert: 1
+----
+
+Apache2
+=======
+
+Choosing the correct worker
+---------------------------
+
+The Apache webserver comes with several different "Multi-Processing Modules", or MPMs.  These are server-cores which work in a slightly different fashion.
+
+>> **NOTE**: You can only use **one** MPM.
+
+Although there are more, traditionally you have three main options to choose between:
+
+* `apache2-mpm-prefork`
+   * This is stable and reliable, working well with non-threadsafe extensions.
+   * It performs reasonably well, at low-levels of concurrency.
+* `apache2-mpm-worker`
+   * This module uses threading, which improves concurrency.
+   * A new thread is opened for new connections, so long-lived connections tend to tie up threads.
+* `apache2-mpm-event`
+   * This is similar to the worker MPM, but uses a single dedicated thread to cope with KeepAlive-requests, rather than allowing all threads to be tied up in that fashion, via long-lived requests.
+
+`apache2-mpm-event` is a little too new to recommend, so on that basis your best choice for performance is almost certainly going to be `apache2-mpm-worker`.  The most important caveat being that if you choose this option you cannot use `mod_php`, and must instead handle your PHP code via a different mechanism (which turns out to be a speedup in its own right).
+
+
+Tuning for PHP
+--------------
+
+As mentioned above the fastest general-purpose worker is the `apache2-mpm-event`, and this isn't compatible with PHP.
+
+To solve this the recommended approach is to deploy the `php5-fpm` module.
+
+On a Debian system you can install the PHP5 FPM module via:
+
+<pre class="code">
+# apt-get install php5-fpm
+</pre>
+
+To further increase performance it is recommended that you connect to FPM via a Unix socket, rather than a network socket.  So you should change `/etc/php5/fpm/pool.d/www.conf` from :
+
+<pre class="code">
+listen = 127.0.0.1:9000
+</pre>
+
+to:
+
+<pre class="code">
+listen = /var/run/php5-fpm.sock
+</pre>
+
+Once you've made that change you can restart via:
+
+<pre class="code">
+# /etc/init.d/php5-fpm restart
+</pre>
+
+With the PHP-FPM part configured you now need to wire up Apache to use it, via the `fastcgi` module.  Again on a Debian system you can install that via:
+
+<pre class="code">
+# apt-get install libapache2-mod-fastcgi
+# a2enmod libapache2-mod-fastcgi
+</pre>
+
+Once installed you can update the configuration file `/etc/apache2/mods-available/fastcgi.conf` to read:
+
+<pre class="code">
+&lt;IfModule mod_fastcgi.c&gt;
+       AddHandler php5-fcgi .php
+       Action php5-fcgi /php5-fcgi
+       Alias /php5-fcgi /usr/lib/cgi-bin/php5-fcgi
+       FastCgiExternalServer /usr/lib/cgi-bin/php5-fcgi -socket /var/run/php5-fpm.sock -pass-header Authorization
+&lt;/IfModule&gt;
+</pre>
+
+General Webserver Notes
+-----------------------
+
+We also have a page of [general notes for webservers](/guide/general/webservers/).
+
