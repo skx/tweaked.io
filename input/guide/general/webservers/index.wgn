@@ -1,0 +1,51 @@
+Title: General Webserver speedup &amp; optimization guide
+menu: menu
+show_advert: 1
+----
+
+General Webserver Tips
+======================
+
+There are some good rules of thumb for configuring webservers, which are not particular to any particular one (nginx, apache, etc).
+
+This page documents a couple of them.
+
+"Keep Alive"
+------------
+The purpose of keep-alive is simple in theory;  rather than clients having to open a fresh connection to your server for each request they make (index, then CSS, then images), they open one connection.
+
+When the initial connection is made that connection is kept-alive, such that further requests can be made down it.
+
+From the client point of view the client doesn't need to wait for multiple responses, and the end-user receives a better response.
+
+However the server is left keeping sockets open in the hope that further requests come.  If they don't then resources are being held open which could be bettered used to handle fresh visitors.
+
+Generally people suggest leaving a small number of sockets available for keep-alive, or only keeping sockets open for a short period of time - such as five seconds - after which time the chances of a further request are minimal.
+
+
+
+DNS Lookups
+-----------
+It is almost always a mistake to perform DNS lookups on the clients which make requests against your server.
+
+If your logfiles log only the IP addresses of your visitors you can configure your log-graphing application (webalizer, etc) to perform the lookups when it generates its reports.
+
+For Apache 2.x you can disable the lookup of hostnames for logs via :
+
+<pre class="code">
+#
+# Don't resolve requesting IPs into hostnames for logging.
+#
+HostnameLookups Off
+</pre>
+
+
+When you just _can't_ scale further
+-----------------------------------
+
+When you can't scale any further you might gain additional performance by
+placing a caching proxy in front of your server.
+
+The [Varnish Cache](http://varnish-cache.org/) is highly regarded, but there
+are also other alternatives such as the venerable [Squid cache](http://www.squid-cache.org/).
+
