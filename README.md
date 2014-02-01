@@ -19,7 +19,7 @@ For example:
 * nfs
 * glusterfs
 
-I explicitly do not intend to cover the optization of applications
+I explicitly do not intend to cover the optimization of applications
 such as Magento, Wordpress, or similar.  The reason for this is that
 too many variables are at play, and new releases would quickly render
 documentation obsolete.
@@ -45,7 +45,7 @@ Dependencies include:
 
 * [python-slimmer](http://packages.debian.org/python-slimmer)
    * Used to minify the CSS
-* Templer dependencies:
+* The following Perl-modules are templer dependencies:
    * [Text::Markdown](http://packages.debian.org/libtext-markdown-perl)
    * [HTML::Template](http://packages.debian.org/libhtml-template-perl)
 
