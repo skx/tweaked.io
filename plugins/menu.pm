@@ -58,7 +58,7 @@ sub expand_variables
             #  Bold if this page is the current-page.
             #
             my $bold = undef;
-            $bold = 1 if ( $pPath =~ /$section/ );
+            $bold = 1 if ( $pPath =~ /\/$section\// );
 
             push( @$menu, { name => $section,
                             path => "/guide/$section/",
