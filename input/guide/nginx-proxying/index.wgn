@@ -100,6 +100,19 @@ This template is a good starting point for a reverse-proxy, but we can certainly
 Buffering Control
 -----------------
 
+When buffering is disabled, a response is passed to a client synchronously,
+as soon as it is received from the back-end.
+
+`nginx` will not try to read the whole response from the proxied server.
+
+The maximum size of the data that nginx can receive from the server at a time is set by the proxy_buffer_size directive.
+
+<pre class="code">
+proxy_buffering off;
+proxy_buffer_size 128k;
+proxy_buffers 100 128k;
+</pre>
+
 
 Caching & Expiration Control
 ----------------------------
@@ -129,7 +142,7 @@ http {
                  location ~* \.(html|css|jpg|gif|ico|js)$ {
                         proxy_cache          cache;
                         proxy_cache_key      $host$uri$is_args$args;
-                        proxy_cache_valid    200 30m;
+                        proxy_cache_valid    200 301 302 30m;
                         expires              30m;
                         proxy_pass  http://backend;
                  }
@@ -141,9 +154,9 @@ http {
 Here we cache requests to `/tmp/cache`, and we have defined a size-limit on that cache location of 1G.  We've also configured the server to only cache valid responses, via:
 
 <pre class="code">
-proxy_cache_valid    200 30m;
+proxy_cache_valid  200 301 302 30m;
 </pre>
 
-Anything that doesn't response with a "`HTTP 200 OK`" is not cached.
+Anything that doesn't response with a "`HTTP (200|301|302) OK`" is not cached.
 
-Typically we'd have to deal with cookies, and cache expiration, but by caching only static content we're avoiding that issue.
+For a system, such as wordpress, we'd have to deal with cookies, and cache expiration, but by caching only static resources we're avoiding that issue here.
