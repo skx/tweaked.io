@@ -1,0 +1,93 @@
+Title: Benchmark Results
+menu: menu
+results: 1
+----
+
+
+Benchmarks Are Unfair
+=====================
+
+Here we're going to look at the results of applying some of the [nginx-proxying](/guide/nginx-proxying) updates to a standard server.
+
+The testing we're carrying out is of `nginx` as a reverse-proxy in front of a slow HTTP-server:
+
+* Internet > nginx > Application server
+
+Posting benchmarks is usually a mistake, because the only thing you care about is the increase in speed in _your_ server, or application.  Benchmarks tend to be on unrelated systems, with different hardware and unrealistic traffic patterns.
+
+The only fair benchmark I can think of posting is of a reverse-proxy because everything else stays the same.   The actual performance of the back-end is largely irrelevent, we're just testing the overhead, or speedup, introduced by the middle-layer.
+
+But note that even this benchmark isn't fair or realistic, because it only covers the case of hitting a single _static_ URL - It isn't representative of a real website.
+
+
+
+Initial Testing
+---------------
+
+The initial testing is literally with Apache proxying through to the application, with zero caching, and zero tweaks.
+
+The [nginx configuration file](nginx.1.conf) is available for download.
+
+The testing uses siege to fire off 50 concurrent connections for 5 minutes, via this command:
+
+<pre class="code">
+siege -c 50 -t120s http://localhost:8888/index.html
+</pre>
+
+The results were:
+<pre class="code">
+Transactions:     10477 hits
+Availability:       100.00 %
+Transaction rate:    87.31 trans/sec
+</pre>
+
+
+Adding Caching
+--------------
+
+We now configure `nginx` to cache the results of all static pages, which
+as luck would have it would be all of our site - as this is not a dynamic
+application.
+
+The [updated configuration file](nginx.1.conf) is available for download.
+
+We'd expect a significant increase in performance with this caching, because
+we only expect to hit the back-end once - the rest of the requests will
+be served from the cache.
+
+As expected our throughput increased, because only a single request was actually processed by the back-end.  The rest of the responses came from the cache:
+
+<pre class="code">
+Transactions:     11882 hits
+Availability:       100.00 %
+Transaction rate:    99.31 trans/sec
+</pre>
+
+Jumped from 87 transactions per second to 99.  Not a huge gain, but certainly a measurable one.
+
+Updating Buffer Sizes
+---------------------
+
+Finally we tweak the buffer sizes.  The average page-response in our simple
+HTTP-server is 50k, but we're only hitting the front-page which is a little
+smaller.
+
+Updating the buffer-sizes in our [configuration file](nginx.3.conf) leads
+to the following results:
+
+<pre class="code">
+Transactions:     12930 hits
+Availability:       100.00 %
+Transaction rate:   107.75 trans/sec
+</pre>
+
+This took us from our original result of 87 transactions per second to just over a hundred.
+
+Conclusion
+----------
+
+If you're serving static files then using `nginx` as a caching reverse-proxy
+will give you a performance boost.
+
+In the real-world most sites are not 100% static, but you can apply this
+idea to serving `/js`, `/media`, `/images`, and similar paths from an `nginx` cache, proxying the dynamic requests to another server.
