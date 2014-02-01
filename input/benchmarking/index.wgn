@@ -24,7 +24,7 @@ Obviously a server "loses points" if some of the response are errors, rather tha
 
 ### ab
 
-One of the most popular tools for benchmarking for many years was the `ab`, the Apache benchmark tool.  This is looking a little dated now, but still works well.
+One of the most popular tools for benchmarking for many years was `ab`, the Apache benchmark tool.  This is looking a little dated now, but still works well.
 
 If you're running Apache you probably have this installed already, which explains its popularity.  Give it a URL, a number of requests, and a concurrency level and it will issue a small report:
 
