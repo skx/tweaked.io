@@ -10,6 +10,29 @@ There are some good rules of thumb for configuring webservers, which are not par
 
 This page documents a couple of them.
 
+
+Request Size Limits
+-------------------
+
+Unless you're allowing remote users to upload images, or other large media, you should disable handling of large-requests.
+
+Large requests cause your server to be stuck waiting for the request to be read and processed, and can cause denial-of-service attacks.
+
+Under `nginx` incoming requests can be limited in size via:
+
+<pre class="code">
+# Don't allow requests of more than 100k in size.
+client_max_body_size 100k;
+</pre>
+
+For Apache the limit is applied like so:
+
+<pre class="code">
+# Don't allow more than 100k to be uploaded.
+LimitRequestBody 102400
+</pre>
+
+
 "Keep Alive"
 ------------
 The purpose of keep-alive is simple in theory;  rather than clients having to open a fresh connection to your server for each request they make (index, then CSS, then images), they open one connection.
