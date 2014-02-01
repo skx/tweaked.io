@@ -101,9 +101,49 @@ Buffering Control
 -----------------
 
 
-Caching
--------
+Caching & Expiration Control
+----------------------------
+
+In the template above we saw that all requests were passed through to the back-end.  To avoid overloading the back-end with static requests we can configure nginx to cache responses which are not going to change.
+
+This means that `nginx` won't even need to talk to the back-end for those requests.
+
+This next example causes `*.html`, `*.gif`, etc, to be cached for 30 minutes:
 
 
-Expiration
-----------
+<pre class="code">
+http {
+     #
+     # The path we'll cache to.
+     #
+     proxy_cache_path /tmp/cache levels=1:2 keys_zone=cache:60m max_size=1G;
+}
+
+            ## send all traffic to the back-end
+            location / {
+
+                 proxy_pass  http://backend;
+                 proxy_redirect off;
+                 proxy_set_header        X-Forwarded-For $remote_addr;
+
+                 location ~* \.(html|css|jpg|gif|ico|js)$ {
+                        proxy_cache          cache;
+                        proxy_cache_key      $host$uri$is_args$args;
+                        proxy_cache_valid    200 30m;
+                        expires              30m;
+                        proxy_pass  http://backend;
+                 }
+            }
+</pre>
+
+>> **NOTE**:  We added a line to the `http` section too.
+
+Here we cache requests to `/tmp/cache`, and we have defined a size-limit on that cache location of 1G.  We've also configured the server to only cache valid responses, via:
+
+<pre class="code">
+proxy_cache_valid    200 30m;
+</pre>
+
+Anything that doesn't response with a "`HTTP 200 OK`" is not cached.
+
+Typically we'd have to deal with cookies, and cache expiration, but by caching only static content we're avoiding that issue.
