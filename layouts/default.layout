@@ -53,11 +53,12 @@
         </div>
         <!-- /tmpl_if -->
 
-        <h2>Measuring</h2>
+        <h2>Testing</h2>
         <div class="menu_simple">
           <ul>
-            <li><a  <!-- tmpl_if name='benchmarking' -->class="current" <!-- /tmpl_if -->  href="/benchmarking/">Benchmarking</a></li>
-            <li><a  <!-- tmpl_if name='results' -->class="current" <!-- /tmpl_if -->  href="/benchmarking/results">Results</a></li>
+            <li><a <!-- tmpl_if name='considerations' -->class="current" <!-- /tmpl_if -->  href="/benchmarking/considerations/">Considerations</a></li>
+            <li><a <!-- tmpl_if name='benchmarking' -->class="current" <!-- /tmpl_if -->  href="/benchmarking/">Benchmarking</a></li>
+            <li><a <!-- tmpl_if name='results' -->class="current" <!-- /tmpl_if -->  href="/benchmarking/results">Results</a></li>
           </ul>
         </div>
         <!-- Column 2 end -->
