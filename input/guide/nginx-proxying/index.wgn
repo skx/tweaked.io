@@ -1,0 +1,109 @@
+Title: nginx reverse-proxying speedup &amp; optimization guide
+menu: menu
+show_advert: 1
+----
+
+nginx
+=====
+
+[nginx](http://nginx.org/) is a small and fast server which generally outperforms most of the alternatives out of the box, however there is always room for improvement.
+
+`nginx` can operate both as a webserver and as a reverse proxy, and we have notes on [optimizing nginx as a webserver](/guide/nginx/).
+
+
+General Tuning
+--------------
+
+As with using `nginx` as a webserver the initial tuning step is to ensure that you have one work per CPU-core on your system, and suitably high number of worker_connections.
+
+When `nginx` is working as a reverse proxy there will be two connections used up by every client:
+
+* One for the incoming request from the client.
+* One for the connection to the back-end.
+
+Assuming you have two CPU cores, which you can validate by running:
+
+<pre class="code">
+$ grep ^proces /proc/cpuinfo  | wc -l
+2
+</pre>
+
+Then this is a useful starting point:
+
+<pre class="code">
+# One worker per CPU-core.
+worker_processes  2;
+
+events {
+    worker_connections  8096;
+    multi_accept        on;
+    use                 epoll;
+}
+
+worker_rlimit_nofile 40000;
+
+http {
+    sendfile           on;
+    tcp_nopush         on;
+    tcp_nodelay        on;
+    keepalive_timeout  15;
+
+}
+</pre>
+
+
+Standard Proxying
+-----------------
+
+The following is a basic template for an nginx reverse-proxy which passes on
+all requests to a given back-end.
+
+The net result is that rquests to `http://your.ip:80/` will be redirected to
+the private server running on `http://127.0.0.1:4433/`:
+
+<pre class="code">
+# One process for each CPU-Core
+worker_processes  2;
+
+# Event handler.
+events {
+    worker_connections  8096;
+    multi_accept        on;
+    use                 epoll;
+}
+
+http {
+
+     # Basic reverse proxy server
+     upstream backend  {
+           server 127.0.0.1:4433;
+     }
+
+     # *:80 -> 127.0.0.1:4433
+     server {
+            listen       80;
+            server_name  example.com;
+
+            ## send all traffic to the back-end
+            location / {
+                 proxy_pass        http://backend;
+                 proxy_redirect    off;
+                 proxy_set_header  X-Forwarded-For $remote_addr;
+            }
+     }
+}
+</pre>
+
+This template is a good starting point for a reverse-proxy, but we can certainly do better.
+
+
+Buffering Control
+-----------------
+
+
+Caching
+-------
+
+
+Expiration
+----------
