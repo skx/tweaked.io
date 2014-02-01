@@ -27,6 +27,44 @@ Although there are more, traditionally you have three main options to choose bet
 `apache2-mpm-event` is a little too new to recommend, so on that basis your best choice for performance is almost certainly going to be `apache2-mpm-worker`.  The most important caveat being that if you choose this option you cannot use `mod_php`, and must instead handle your PHP code via a different mechanism (which turns out to be a speedup in its own right).
 
 
+Disabling `.htaccess` files
+---------------------------
+
+If you allow configuration files to be present beneath your DocumentRoot
+directory you cause Apache to constantly test for them.
+
+For example if you have a `DocumentRoot` set to `/var/www` and a client
+requests the URL `http://example.com/a/long/path/` Apache will look for
+each of the following files:
+
+* `/var/www/a/long/path/.htaccess`
+* `/var/www/a/long/.htaccess`
+* `/var/www/a/.htaccess`
+
+This is clearly a lot of needless searching, and it is needless searching
+which will be constantly repeated.
+
+To disable this behaviour you need to do two things:
+
+* Make any configuration settings which were previously present in a `.htaccess` file inside your main server configuration files - be that in a virtual host file, or in the global section.
+* Disable the lookup of `.htaccess` files.
+
+To disable this behaviour simply set:
+
+<pre class="code">
+<Directory />
+  AllowOverride None
+</Directory>
+
+#
+#  Assuming your DirectoryRoot is set to /var/www
+#
+<Directory /var/www/>
+  AllowOverride None
+</Directory>
+</pre>
+
+
 Tuning for PHP
 --------------
 
