@@ -28,7 +28,7 @@ The initial testing is literally with Apache proxying through to the application
 
 The [nginx configuration file](nginx.1.conf) is available for download.
 
-The testing uses siege to fire off 50 concurrent connections for 5 minutes, via this command:
+The testing uses siege to fire off 50 concurrent connections for 2 minutes, via this command:
 
 <pre class="code">
 siege -c 50 -t120s http://localhost:8888/index.html
