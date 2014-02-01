@@ -26,7 +26,7 @@ Initial Testing
 
 The initial testing is literally with Apache proxying through to the application, with zero caching, and zero tweaks.
 
-The [nginx configuration file](nginx.1.conf) is available for download.
+The [nginx configuration file](nginx.1.conf.txt) is available for download.
 
 The testing uses siege to fire off 50 concurrent connections for 2 minutes, via this command:
 
@@ -49,7 +49,7 @@ We now configure `nginx` to cache the results of all static pages, which
 as luck would have it would be all of our site - as this is not a dynamic
 application.
 
-The [updated configuration file](nginx.1.conf) is available for download.
+The [updated configuration file](nginx.2.conf.txt) is available for download.
 
 We'd expect a significant increase in performance with this caching, because
 we only expect to hit the back-end once - the rest of the requests will
@@ -72,7 +72,7 @@ Finally we tweak the buffer sizes.  The average page-response in our simple
 HTTP-server is 50k, but we're only hitting the front-page which is a little
 smaller.
 
-Updating the buffer-sizes in our [configuration file](nginx.3.conf) leads
+Updating the buffer-sizes in our [configuration file](nginx.3.conf.txt) leads
 to the following results:
 
 <pre class="code">
