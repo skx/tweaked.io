@@ -27,8 +27,7 @@
 # A rule for generating the CSS
 #
 %.css : %.in
-	@test -e /usr/share/pyshared/slimmer/slimmer.py || echo "apt-get install python-slimmer"
-	@python /usr/share/pyshared/slimmer/slimmer.py $< css --output=$@
+	@if ( test -e /usr/share/pyshared/slimmer/slimmer.py ); then python /usr/share/pyshared/slimmer/slimmer.py $< css --output=$@  ; else cp $< $@ ; fi
 
 
 #
@@ -37,23 +36,24 @@
 #  2. Generate the CSS.
 #
 build: clean input/css/s.css
-	templer --force
+	@templer --force
 
 #
 # Clean the site.
 #
 clean:
-	rm -rf output
+	@-rm -rf output input/css/s.css || true
+
 
 #
 # Build the site and serve it locally.
 #
 serve: build
-	templer --serve=4433
+	@templer --serve=4433
 
 
 #
 # Upload the site to the live location.
 #
 upload: build
-	rsync -vazr --delete output/ s-tweaked@www.steve.org.uk:htdocs/
+	rsync -qazr --delete output/ s-tweaked@www.steve.org.uk:htdocs/
