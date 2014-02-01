@@ -8,6 +8,8 @@ nginx
 
 [nginx](http://nginx.org/) is a small and fast server which generally outperforms most of the alternatives out of the box, however there is always room for improvement.
 
+`nginx` can operate both as a webserver and as a reverse proxy, and we have notes on [optimizing nginx as a reverse proxy](/guide/nginx-proxying/).
+
 General Tuning
 --------------
 
@@ -22,6 +24,7 @@ $ grep ^processor /proc/cpuinfo | wc -l
 With a quad-core processor this would give you a configuration that started like so:
 
 <pre class="code">
+# One worker per CPU-core.
 worker_processes  4;
 
 events {
@@ -171,9 +174,7 @@ process_control_timeout 10s
 
 >> **TIP**: You might consider the use of the APC cache, which will cache parsed versions of your PHP-files.  This should provide a speedup, even in a PHP-FPM setup.
 
-Alternatives
-------------
+General Webserver Notes
+-----------------------
 
-
-When you've reached the very limit of nginx performance you might consider using the [Varnish Cache](http://varnish-cache.org) as a reverse-proxy in front of nginx.
-
+We also have a page of [general notes for webservers](/guide/general/webservers/).
