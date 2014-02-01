@@ -176,8 +176,3 @@ process_control_timeout 10s
 </pre>
 
 >> **TIP**: You might consider the use of the APC cache, which will cache parsed versions of your PHP-files.  This should provide a speedup, even in a PHP-FPM setup.
-
-General Webserver Notes
------------------------
-
-We also have a page of [general notes for webservers](/guide/general/webservers/).
