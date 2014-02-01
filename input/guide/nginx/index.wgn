@@ -6,9 +6,12 @@ show_advert: 1
 nginx
 =====
 
-[nginx](http://nginx.org/) is a small and fast server which generally outperforms most of the alternatives out of the box, however there is always room for improvement.
+[nginx](http://nginx.org/) is a small and fast webserver which generally outperforms most of the alternatives out of the box, however there is always room for improvement.
 
-`nginx` can operate both as a webserver and as a reverse proxy, and we have notes on [optimizing nginx as a reverse proxy](/guide/nginx-proxying/).
+In addition to operating as a web-server `nginx` can also be used as reverse HTTP proxy, forwarding requests it recieves to different back-end servers.
+
+* [Optimizing nginx webserver](/guide/nginx/).
+* [Optimizing nginx reverse proxy](/guide/nginx-proxying/).
 
 General Tuning
 --------------
