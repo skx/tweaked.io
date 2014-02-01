@@ -6,7 +6,7 @@ Considerations
 ==============
 
 Although it is often possible to improve the responsiveness of your servers
-and services you should make sure you regularly [test your server](/benchmarking) under load to ensure they contain to function as you expect.
+and services you should make sure you regularly [test your server](/benchmarking) under load to ensure it continues to function as you expect.
 
 In most of the recipes we have posted we've listed suggested values for settings
 such as `max_connections`.  These are just guidelines that work well on reasonably powered servers.
