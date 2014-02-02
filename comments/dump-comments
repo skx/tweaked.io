@@ -1,0 +1,35 @@
+#!/usr/bin/perl -w
+#
+# Simple script to dump all comments to the console.
+#
+# Assumes it is running on the same host as redis.
+#
+# Steve
+# --
+
+use strict;
+use warnings;
+
+use Redis;
+
+my $redis = Redis->new();
+
+#
+#  Get the keys
+#
+foreach my $key ( $redis->keys("comments-*") )
+{
+
+    #
+    # For each key show it, and then the comments
+    #
+    print "Comments on $key\n";
+
+    foreach my $member ( $redis->smembers($key) )
+    {
+        print "\t" . $member . "\n";
+    }
+}
+
+$redis->disconnect();
+exit(0);
