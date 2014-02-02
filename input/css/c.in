@@ -21,13 +21,13 @@ div.comment .title {
 	padding: 5px;
 
 }
+
 div.comment .title a {
-        color: black important!;
-        font-weight: bold;
+        color: black !important;
 }
+
 div.comment .title a:hover {
-        color: black important!;
-        font-weight: bold;
+        color: black !important;
 }
 
 div.comment .link {
