@@ -55,14 +55,17 @@ Dependencies include:
 Comments
 --------
 
-As the site is 100% static there is nothing dynamic at all.  Except for comments.
+As the site is 100% static there is nothing dynamic at all, except for
+the display of inline comments at the foot of pages, which are inserted
+via javascript.
 
-Comments are handled by GET/POST requests to
+Comments are handled by making GET/POST requests to
 
-* http://comments.tweaked.io/comments
+* http://comments.tweaked.io/comments/ID
 
 Each page which has comments-enabled has a distinct key, and that key is
-used for both retrieval and submission.
+used for both comment-retrieval and comment-submission, via JSONP or
+HTTP-posts as applicable.
 
 This is an experimental facility and may be removed in the future, once
 the cold-medicine has worn off.
