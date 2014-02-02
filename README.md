@@ -52,6 +52,25 @@ Dependencies include:
 **NOTE**: If the python slimmer tool is unavailable the CSS will just be non-slimmed.  This is a non-fatal error.
 
 
+Comments
+--------
+
+As the site is 100% static there is nothing dynamic at all.  Except for comments.
+
+Comments are handled by GET/POST requests to
+
+* http://comments.tweaked.io/comments
+
+Each page which has comments-enabled has a distinct key, and that key is
+used for both retrieval and submission.
+
+This is an experimental facility and may be removed in the future, once
+the cold-medicine has worn off.
+
+The comment-server is pretty trivial, and written using Sinatra. The code
+is available within the [comments/](comments/) directory.
+
+
 Contact
 -------
 
