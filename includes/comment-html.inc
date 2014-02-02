@@ -4,6 +4,8 @@
   <table id="ecomments">
   </table>
 
+  <div id="comsub">
+
   <h2>Add Comment</h2>
   <blockquote>
     <form method="POST" id="myform" action="http://localhost:4567">
@@ -23,5 +25,6 @@
       </table>
     </form>
   </blockquote>
+  </div>
 </div>
 <!-- /tmpl_if -->

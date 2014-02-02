@@ -13,7 +13,7 @@ function comments(data)
 
    $.each(data,function( key,val) {
 
-     $('#ecomments').append("<tr><td>#" + id + " " + val["time"] + "</td><td>" + val["author"] + "</td></tr>" );
+     $('#ecomments').append("<tr><td>#" + id + " " + val["ago"] + "</td><td>" + val["author"] + "</td></tr>" );
     $('#ecomments').append("<tr><td colspan=\"2\"><blockquote>" + val["body"] + "</blockquote></td></tr>" );
     id += 1;
    });
@@ -47,8 +47,8 @@ $( document ).ready(function() {
     // Capture form-submissions.
     //
     $("#myform").submit(function() {
-
-    $.ajax({
+      $("#comsub").toggle()
+      $.ajax({
            type: "POST",
            url: "http://comments.tweaked.io/comments/",
            data: $("#myform").serialize(), // serializes the form's elements.

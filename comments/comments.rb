@@ -17,6 +17,25 @@ class CommentStore < Sinatra::Base
   set :port, 9393
 
   #
+  # Simple method to work out how old a comment-was.
+  #
+  def time_in_words(date)
+    date = Date.parse(date, true) unless /Date.*/ =~ date.class.to_s
+    days = (date - Date.today).to_i
+
+    return 'today'     if days >= 0 and days < 1
+    return 'tomorrow'  if days >= 1 and days < 2
+    return 'yesterday' if days >= -1 and days < 0
+
+    return "in #{days} days"      if days.abs < 60 and days > 0
+    return "#{days.abs} days ago" if days.abs < 60 and days < 0
+
+    return date.strftime('%A, %B %e') if days.abs < 182
+    return date.strftime('%A, %B %e, %Y')
+  end
+
+
+  #
   # Posting a hash of author + body, with a given ID will
   # appends a simplified version of the comment to a redis set.
   #
@@ -27,10 +46,12 @@ class CommentStore < Sinatra::Base
 
     if ( author && body && id )
 
+      ip = request.ip
+
       #
       #  Trivial stringification.
       #
-      content = "#{Time.now}|#{author}|#{body}"
+      content = "#{ip}|#{Time.now}|#{author}|#{body}"
 
       #
       #  Add to the set.
@@ -44,7 +65,7 @@ class CommentStore < Sinatra::Base
       status 204
     end
 
-    status 500, "Missing data"
+    halt 500, "Missing field(s)"
   end
 
   #
@@ -71,13 +92,14 @@ class CommentStore < Sinatra::Base
     values.each do |str|
 
       # tokenize.
-      time,author,body = str.split("|")
+      ip,time,author,body = str.split("|")
 
       # Add the values to our array of hashes
       result << { :time => time,
+        :ago => time_in_words(time),
+        :ip => ip,
         :author => CGI.escapeHTML(author),
         :body => CGI.escapeHTML(body) }
-
       i += 1
     end
 
