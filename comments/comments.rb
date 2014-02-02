@@ -1,7 +1,26 @@
 #!/usr/bin/ruby
 #
-# This is a sinatra application for receiving comments.
+# This is a sinatra application for storing/retrieving comments.
 #
+# It is designed to work on the http://tweaked.io/ site, but there is
+# nothing specific to that site here.
+#
+# The only dependencies are a Redis server running on localhost, and the
+# appropriate Ruby packages to run sinatra
+#
+#
+# Storing:
+#   POST "body" + "author" to /comments/ID
+#
+# Fetching
+#   GET /comments/ID
+#
+# Arbitrary IDs are supported, so long as they are unique for each page,
+# and don't contain slashes.  Ahem.
+#
+# Steve
+# --
+
 
 require 'sinatra'
 require 'redis'
@@ -109,9 +128,21 @@ class CommentStore < Sinatra::Base
     # now return a JSONP-friendly result.
     "comments(#{json})";
   end
+
+  #
+  # If the user hits an end-point we don't recognize then
+  # redirect
+  #
+  not_found do
+    site = ENV["SITE"] || 'http://tweaked.io/'
+    redirect site
+  end
+
 end
 
-
+#
+# Launch the server
+#
 if __FILE__ == $0
   CommentStore.run!
 end
