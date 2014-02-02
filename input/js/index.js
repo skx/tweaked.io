@@ -28,7 +28,18 @@ function comments(data)
     // Create a header & a table.
     //
     id = 1
-    $("#comments").html( "<h2>Comments</h2><table></table>");
+    $("#comments").html( "<table></table>");
+
+    //
+    // If there are no comments then we avoid the useless header.
+    //
+    // This works because either way the <table> will be created, but
+    // if it is empty it takes up no space.
+    //
+    if ( data.length > 0 )
+    {
+        $("#comments").prepend( "<h2>Comments</h2>");
+    }
 
     $.each(data,function( key,val) {
 
