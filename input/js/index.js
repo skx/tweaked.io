@@ -55,18 +55,14 @@ function loadComments(url)
 function comments(data)
 {
     //
-    // We're given a DIV with ID comments.
+    // We're given a DIV with ID comments.  Empty it.
     //
-    // Create a header & a table.
     //
+    $("#comments").html( "" );
     id = 1
-    $("#comments").html( "<table></table>");
 
     //
-    // If there are no comments then we avoid the useless header.
-    //
-    // This works because either way the <table> will be created, but
-    // if it is empty it takes up no space.
+    // If there are some comments we should post a header.
     //
     if ( data.length > 0 )
     {
@@ -76,10 +72,18 @@ function comments(data)
     $.each(data,function( key,val) {
 
         //
-        // Append the comments to the table.
+        //  The variables from the comment
         //
-	$('#comments').append("<tr><td><p>#" + id + "&nbsp;&nbsp;" + val["ago"] + "</p></td><td><p>&nbsp;&nbsp;" + val["author"] + "</p></td></tr>" );
-	$('#comments').append("<tr><td colspan=\"2\"><blockquote><p>" + val["body"] + "</p></blockquote></td></tr>" );
+        var author = val["author"];
+        var body   = val["body"];
+        var ago    = val["ago"];
+
+        $("#comments").append( "<div class=\"comment\"> \
+<div class=\"link\"><a href=\"#comment_" + id + "\">#</a></div> \
+<div class=\"title\"><a name=\"comment_" + id + "\">Author: " + author + "</a></div> \
+<div class=\"tagline\">" + ago + "<br /></div> \
+<div class=\"body\">" + body + "</div> \
+</div>" );
 	id += 1;
     });
 }
@@ -168,4 +172,3 @@ function discussion(  url )
     loadComments( url )
 
 }
-

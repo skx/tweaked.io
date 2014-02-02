@@ -35,7 +35,7 @@
 #  1. Clean the site, so we're good.
 #  2. Generate the CSS.
 #
-build: clean input/css/s.css
+build: clean input/css/s.css input/css/c.css
 	@templer --force
 
 #
