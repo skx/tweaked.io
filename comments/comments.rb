@@ -58,7 +58,7 @@ class CommentStore < Sinatra::Base
   # Posting a hash of author + body, with a given ID will
   # appends a simplified version of the comment to a redis set.
   #
-  post '/comments/' do
+  post '/comments/:id' do
     author = params[:author]
     body   = params[:body]
     id     = params[:id]
