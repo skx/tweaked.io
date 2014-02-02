@@ -56,16 +56,16 @@ To disable this behaviour you need to do two things:
 To disable this behaviour simply set:
 
 <pre class="code">
-<Directory />
+&lt;Directory /&gt;
   AllowOverride None
-</Directory>
+&lt;/Directory&gt;
 
 #
 #  Assuming your DirectoryRoot is set to /var/www
 #
-<Directory /var/www/>
+&lt;Directory /var/www/&gt;
   AllowOverride None
-</Directory>
+&lt;/Directory&gt;
 </pre>
 
 
