@@ -1,13 +1,45 @@
 //
+//  Disquis-Lite - Inline comments via 100% Javascript/jQuery.
+//
+//  This script allows you to include comments in any static page,
+//  by making GET and POST requests against the URL:
+//
+//      http://comments.tweaked.io/comments/ID
+//
+//  To use this script add the following to the head of your HTML:
+//
+//  // begin
+//  <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+//  <script src="/js/index.js" type="text/javascript"></script>
+//  <script type="text/javascript">
+//     $( document ).ready(function() {
+//        discussion( "http://comments.tweaked.io/comments/id" );
+//     });
+//  </script>
+//  // end
+//
+//
+//  Once you've done that place a suitable DIV in your document body:
+//
+//    <div id="comments"></div>
+//
+//  et voila.
+//
+//  If comments are present they will be retrieved and displayed, otherwise
+// the user will be able to add them.
+//
+// Steve
+// --
+//
+
+
+//
 // Load the comments by making a JSONP request to the given URL.
 //
 // The comments will invoke the `comments(data)` function, when loaded.
 //
-// Once comments are loaded we populate the reply field.
-//
 function loadComments(url)
 {
-
     $.ajax({
         url: url + "?callback=?",
         dataType:'jsonp',
@@ -91,6 +123,7 @@ function populateReplyForm( url )
     // Capture form-submissions.
     //
     $("#myform").bind( "submit",(function() {
+
         //
         // Hide the form when submitting.
         //
@@ -102,7 +135,7 @@ function populateReplyForm( url )
 	$.ajax({
             type: "POST",
             url: url,
-            data: $("#myform").serialize(), // serializes the form's elements.
+            data: $("#myform").serialize(),
             error: function(r,e)
             {
 		loadComments( url);
@@ -121,7 +154,11 @@ function populateReplyForm( url )
 //
 // Entry point.
 //
-// Assumes the URL specified can be used to GET/POST comments.
+// Assumes the URL specified can be used to GET/POST comments, and has
+// the identifier associated with it already.
+//
+//  e.g. http://comments.tweaked.io/comments/apache
+//
 //
 function discussion(  url )
 {
