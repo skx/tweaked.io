@@ -59,19 +59,23 @@ As the site is 100% static there is nothing dynamic at all, except for
 the display of inline comments at the foot of pages, which are inserted
 via javascript.
 
-Comments are handled by making GET/POST requests to
+The comment-handling facility is divided into two parts:
+
+* Client-side
+    * Implemented in [input/js/index.js](input/js/index.js)
+* Server-Side
+    * A [simple sinatra server](comments/comments.rb)
+
+The client-side makes GET/POST requests to
 
 * http://comments.tweaked.io/comments/ID
 
-Each page which has comments-enabled has a distinct key, and that key is
-used for both comment-retrieval and comment-submission, via JSONP or
-HTTP-posts as applicable.
+Where the ID differs on each distinct page, to ensure that only relavent
+comments are returned.
 
 This is an experimental facility and may be removed in the future, once
 the cold-medicine has worn off.
 
-The comment-server is pretty trivial, and written using Sinatra. The code
-is available within the [comments/](comments/) directory.
 
 
 Contact
