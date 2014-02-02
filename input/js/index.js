@@ -9,6 +9,7 @@
 //  To use this script add the following to the head of your HTML:
 //
 //  // begin
+//  <link rel="stylesheet" type="text/css" href="/css/c.css" media="screen" />
 //  <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 //  <script src="/js/index.js" type="text/javascript"></script>
 //  <script type="text/javascript">
@@ -26,7 +27,8 @@
 //  et voila.
 //
 //  If comments are present they will be retrieved and displayed, otherwise
-// the user will be able to add them.
+// the user will be able to add them.  The comments are formatted via CSS
+// so you can change the look and feel easily, if you wish.
 //
 // Steve
 // --

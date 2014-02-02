@@ -66,15 +66,9 @@ The comment-handling facility is divided into two parts:
 * Server-Side
     * A [simple sinatra server](comments/comments.rb)
 
-The client-side makes GET/POST requests to
+If you'd like something similar in your own static sites please consult:
 
-* http://comments.tweaked.io/comments/ID
-
-Where the ID differs on each distinct page, to ensure that only relavent
-comments are returned.
-
-This is an experimental facility and may be removed in the future, once
-the cold-medicine has worn off.
+* https://github.com/skx/e-comments/
 
 
 
