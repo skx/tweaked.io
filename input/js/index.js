@@ -1,5 +1,9 @@
 //
+// Load the comments by making a JSONP request to the given URL.
 //
+// The comments will invoke the `comments(data)` function, when loaded.
+//
+// Once comments are loaded we populate the reply field.
 //
 function loadComments(url)
 {
@@ -18,14 +22,19 @@ function loadComments(url)
 //
 function comments(data)
 {
-   //
-   // Populate the HTML-table with previous comments.
-   //
-   id = 1
-    $("#comments").html( "<table></table>");
+    //
+    // We're given a DIV with ID comments.
+    //
+    // Create a header & a table.
+    //
+    id = 1
+    $("#comments").html( "<h2>Comments</h2><table></table>");
 
     $.each(data,function( key,val) {
 
+        //
+        // Append the comments to the table.
+        //
 	$('#comments').append("<tr><td><p>#" + id + "&nbsp;&nbsp;" + val["ago"] + "</p></td><td><p>&nbsp;&nbsp;" + val["author"] + "</p></td></tr>" );
 	$('#comments').append("<tr><td colspan=\"2\"><blockquote><p>" + val["body"] + "</p></blockquote></td></tr>" );
 	id += 1;
@@ -38,9 +47,8 @@ function comments(data)
 //
 function populateReplyForm( url )
 {
-
     //
-    //  Once the comments are loaded we can populate the reply-function
+    //  Once the comments are loaded we can populate the reply-area.
     //
     $("#comments").append("<div id=\"comments-reply\"></div>" );
 
@@ -72,7 +80,14 @@ function populateReplyForm( url )
     // Capture form-submissions.
     //
     $("#myform").bind( "submit",(function() {
+        //
+        // Hide the form when submitting.
+        //
 	$("#myform").hide();
+
+        //
+        // Send the POST
+        //
 	$.ajax({
             type: "POST",
             url: url,
