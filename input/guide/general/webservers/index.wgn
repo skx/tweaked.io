@@ -37,11 +37,11 @@ LimitRequestBody 102400
 ------------
 The purpose of keep-alive is simple in theory;  rather than clients having to open a fresh connection to your server for each request they make (index, then CSS, then images), they open one connection.
 
-When the initial connection is made that connection is kept-alive, such that further requests can be made down it.
+When the initial connection is made that socket is kept open, rather than beign closed, such that further requests can be using it.
 
-From the client point of view the client doesn't need to wait for multiple responses, and the end-user receives a better response.
+From the client point of view this improves things, as rather than making the overhead to establish, use, and close, multiple connections only one is used.
 
-However the server is left keeping sockets open in the hope that further requests come.  If they don't then resources are being held open which could be bettered used to handle fresh visitors.
+However the server is left keeping sockets open in the hope that further requests will come, and if they don't resources are being needlessly consumed which could be better spent on handling fresh visitors.
 
 Generally people suggest leaving a small number of sockets available for keep-alive, or only keeping sockets open for a short period of time - such as five seconds - after which time the chances of a further request are minimal.
 
