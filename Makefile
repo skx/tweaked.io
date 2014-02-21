@@ -57,3 +57,6 @@ serve: build
 #
 upload: build
 	rsync -qazr --delete output/ s-tweaked@www.steve.org.uk:htdocs/
+
+sitemap:
+	@python sitemap_gen.py -c weekly  -o input/sitemap.xml http://tweaked.io/
