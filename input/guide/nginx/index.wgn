@@ -175,7 +175,7 @@ pm = static
 pm.max_children = 12
 </pre>
 
-This is an example setting, of the kind we mention in the [considerations](benchmarking/considerations/) section - the value of 12 is just an example, which you will need to test under-load to see if it is reasonable for _your_ particular setup.
+This is an example setting, of the kind we mention in the [considerations](/benchmarking/considerations/) section - the value of 12 is just an example, which you will need to test under-load to see if it is reasonable for _your_ particular setup.
 
 
 Finally you can configure PHP-FPM to restart automatically, if there are problems.  In this example we restart if ten child processes die within 1 minute, and we allow 10 seconds to pass before that happens.
