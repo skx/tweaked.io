@@ -101,6 +101,7 @@ As many require subscriptions, or validation, they're not suitable for all, but 
 
 * [http://blitz.io/](http://blitz.io/)
 * [http://loader.io/](http://loader.io/)
+* [https://loadimpact.com/](https://loadimpact.com/)
 
 Simpler testing will just test a single page and report the time taken to load all associated resources (CSS, images, etc).  Not quite as valuable, but interesting nonetheless:
 
