@@ -15,9 +15,9 @@ For example:
 * Apache 2.x.
 * nginx.
 * lighttpd.
-* mysql
-* nfs
-* glusterfs
+* mysql.
+* nfs.
+* glusterfs.
 
 I explicitly do not intend to cover the optimization of applications
 such as Magento, Wordpress, or similar.  The reason for this is that
