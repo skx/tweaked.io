@@ -61,12 +61,11 @@ via javascript.
 
 The comment-handling facility is divided into two parts:
 
-* Client-side
-    * Implemented in [input/js/index.js](input/js/index.js)
-* Server-Side
-    * A [simple sinatra server](comments/comments.rb)
+* A simple server which receives new comments, and serves existing ones.
+* A client-side javascript library which handles retrieving/posting new ones, via interactions with that remote server.
 
-If you'd like something similar in your own static sites please consult:
+The commenting system was written for this site, but has been tidied up
+and made available in a standalone fashion now:
 
 * https://github.com/skx/e-comments/
 
