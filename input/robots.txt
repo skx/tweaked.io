@@ -1,0 +1,4 @@
+Sitemap: http://tweaked.io/sitemap.xml
+
+User-agent: *
+Crawl-delay: 10
