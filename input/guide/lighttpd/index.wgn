@@ -9,9 +9,6 @@ lighttpd
 
 [lighttpd](http://www.lighttpd.net/) (pronounced "__lighty__") is a fast, secure and flexible webserver.  The build-in module system allows it be extended as much as the more mature Apache server, and its featureset is pretty complete right out of the box.
 
-General Tuning
---------------
-
 
 Compression
 -----------
@@ -86,6 +83,45 @@ expire.url = ( "/fonts/" =&gt; "access plus 2 months",
 
 Tuning for PHP
 --------------
+
+Lighttpd supports the use of PHP via FPM:
+
+<pre>
+server.modules += ( "mod_fastcgi" )
+
+index-file.names += ( "index.php" )
+
+fastcgi.server = (
+    ".php" => (
+      "localhost" => (
+        "socket" => "/var/run/php5-fpm.sock",
+        "broken-scriptfilename" => "enable"
+      ))
+)
+</pre>
+
+Notice that this uses a Unix domain-socket to connect to FPM, so you need to ensure that you change `/etc/php5/fpm/pool.d/www.conf` to read:
+
+<pre class="code">
+listen = /var/run/php5-fpm.sock
+</pre>
+
+This ensures that FPM will listen on a domain socket, rather than the default of listening on a network-socket (the default is "`listen=127.0.0.1:9000`").
+
+By default PHP-FPM will start a number of dedicated workers, each running an instance of PHP.  If you're not swamped for memory you can increase the number of workers to increase concurrent-throughput.
+
+Edit the file `/etc/php5/fpm/pool.d/www.conf` to change the number of children:
+
+<pre class="code">
+; set a fixed number of php workers
+pm = static
+
+; start up 12 php processes
+pm.max_children = 12
+</pre>
+
+This is an example setting, of the kind we mention in the [considerations](/benchmarking/considerations/) section - the value of 12 is just an example, which you will need to test under-load to see if it is reasonable for _your_ particular setup.
+
 
 General Webserver Notes
 -----------------------
