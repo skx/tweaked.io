@@ -16,9 +16,9 @@ Compression
 Like most other web-servers `lighttpd` supports the use of gzip-compression.
 
 Enabling compression generally involves a making trade-off between using
-CPU to perform the compression, versus just sending more traffic out to
+the CPU to perform compression, versus just sending more traffic out to
 the network, however `lighttpd` does allow you to work around this problem
-by caching the compressed content on-disk.
+by writing the compressed content to disk.
 
 Compressing the content on-disk means that multiple requests for a
 compressible document do __not__ need to burn CPU-cycles repeatedly
@@ -46,6 +46,10 @@ compress.cache-dir         = "/srv/tweaked.io/cache"
 
 </pre>
 
+The compression-cache is keyed upon the document name, size, and
+E-tag, to avoid issues when the original document changes.  That said
+it is still recommended you setup a script to purge the cached content
+which is older than a few days.
 
 Client Caching
 --------------
@@ -86,7 +90,7 @@ Tuning for PHP
 
 Lighttpd supports the use of PHP via FPM:
 
-<pre>
+<pre class="code">
 server.modules += ( "mod_fastcgi" )
 
 index-file.names += ( "index.php" )
