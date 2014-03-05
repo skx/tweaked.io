@@ -53,18 +53,33 @@ compress.cache-dir         = "/srv/tweaked.io/cache"
 Client Caching
 --------------
 
+A simple way of avoiding your server handling requests is if remote
+clients believe their content is already up-to-date.
+
+To do this you want to set suitable cache-friendly headers, and a simple
+way of doing that is to declare that all images, etc, are fixed for a given
+period of time.
+
+To do this load `mod_access`, and define patterns:
 
 <pre class="code">
 
-server.modules              = (
-                                # Your modules here ..
-                                "mod_access",
-                                # Your modules here ..
-                              )
+server.modules  = (
+                     # Put mod_access first.
+                     "mod_access",
+                     # Your modules here ..
+                  )
 
+# Cache based on suffix
 $HTTP["url"] =~ "\.(jpg|gif|png|css|js)$" {
      expire.url = ( "" =&gt; "access plus 2 months" )
 }
+
+# Cache based on path
+expire.url = ( "/fonts/" =&gt; "access plus 2 months",
+               "/i/"     =&gt; "access plus 2 months",
+               "/media/" =&gt; "access plus 2 months",
+             )
 </pre>
 
 
