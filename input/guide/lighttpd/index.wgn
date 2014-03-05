@@ -1,0 +1,78 @@
+Title: lighttpd speedup &amp; optimization guide
+menu: menu
+show_advert: 1
+comments:lighttpd
+----
+
+lighttpd
+========
+
+[lighttpd](http://www.lighttpd.net/) (pronounced "__lighty__") is a fast, secure and flexible webserver.  The build-in module system allows it be extended as much as the more mature Apache server, and its featureset is pretty complete right out of the box.
+
+General Tuning
+--------------
+
+
+Compression
+-----------
+
+Like most other web-servers `lighttpd` supports the use of gzip-compression.
+
+Enabling compression generally involves a making trade-off between using
+CPU to perform the compression, versus just sending more traffic out to
+the network, however `lighttpd` does allow you to work around this problem
+by caching the compressed content on-disk.
+
+Compressing the content on-disk means that multiple requests for a
+compressible document do __not__ need to burn CPU-cycles repeatedly
+compressing the same document.
+
+The only caveat to this behaviour is that you need to both specify __and__
+create the cache-directory.  The following is a reasonable example:
+
+<pre class="code">
+
+server.modules              = (
+                                # Your modules here ..
+                                "mod_compress",
+                                # Your modules here ..
+                              )
+
+
+#### compress module
+compress.allowed-encodings = ("gzip", "deflate")
+compress.filetype          = ("text/plain", "text/html", "text/javascript", "text/css", "text/xml" )
+
+# You must create this directory.
+compress.cache-dir         = "/srv/tweaked.io/cache"
+
+
+</pre>
+
+
+Client Caching
+--------------
+
+
+<pre class="code">
+
+server.modules              = (
+                                # Your modules here ..
+                                "mod_access",
+                                # Your modules here ..
+                              )
+
+$HTTP["url"] =~ "\.(jpg|gif|png|css|js)$" {
+     expire.url = ( "" =&gt; "access plus 2 months" )
+}
+</pre>
+
+
+
+Tuning for PHP
+--------------
+
+General Webserver Notes
+-----------------------
+
+We also have a page of [general notes for webservers](/guide/general/webservers/).
