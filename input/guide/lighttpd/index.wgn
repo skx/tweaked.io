@@ -94,8 +94,8 @@ index-file.names += ( "index.php" )
 fastcgi.server = (
     ".php" => (
       "localhost" => (
-        "socket" => "/var/run/php5-fpm.sock",
-        "broken-scriptfilename" => "enable"
+        "socket"                =&gt; "/var/run/php5-fpm.sock",
+        "broken-scriptfilename" =&gt; "enable"
       ))
 )
 </pre>
