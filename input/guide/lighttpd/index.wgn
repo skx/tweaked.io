@@ -29,11 +29,11 @@ create the cache-directory.  The following is a reasonable example:
 
 <pre class="code">
 
-server.modules              = (
-                                # Your modules here ..
-                                "mod_compress",
-                                # Your modules here ..
-                              )
+server.modules  = (
+                    # Your modules here ..
+                    "mod_compress",
+                    # Your modules here ..
+                  )
 
 
 #### compress module
@@ -41,7 +41,7 @@ compress.allowed-encodings = ("gzip", "deflate")
 compress.filetype          = ("text/plain", "text/html", "text/javascript", "text/css", "text/xml" )
 
 # You must create this directory.
-compress.cache-dir         = "/srv/tweaked.io/cache"
+compress.cache-dir = "/srv/tweaked.io/cache"
 
 
 </pre>
@@ -64,7 +64,6 @@ period of time.
 To do this load `mod_access`, and define patterns:
 
 <pre class="code">
-
 server.modules  = (
                      # Put mod_access first.
                      "mod_access",
@@ -88,7 +87,11 @@ expire.url = ( "/fonts/" =&gt; "access plus 2 months",
 Tuning for PHP
 --------------
 
-Lighttpd supports the use of PHP via FPM:
+Lighttpd supports the use of PHP plain CGI or via FastCGI.  For performance
+you want to use the FastCGI + PHP FPM combination.
+
+Install the PHP5-FPM package, such that you can get a persistant pool
+of workers, then configure `lighttped` to use them like so:
 
 <pre class="code">
 server.modules += ( "mod_fastcgi" )
