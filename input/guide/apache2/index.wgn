@@ -7,7 +7,9 @@ comments:apache
 Apache2
 =======
 
-**NOTE**: This page is still work-in-progress.  [Contributions welcome](https://github.com/skx/tweaked.io/).
+[Apache](http://httpd.apache.org/) is described as the worlds most popular  webserver, and part of the reason for that is the extensive flexibility it offers.
+
+The flexibility allows many interesting, and useful, things to be done with the server, but the cost is a higher overhead in processing requests.  This has lead to the rise of several alternative web-servers aiming to be more lightweight and flexible.  (These include products such as [nginx](/guide/nginx) and [lighttpd](/guide/lighttpd/).)
 
 
 Choosing the correct worker
@@ -20,7 +22,7 @@ The Apache webserver comes with several different "Multi-Processing Modules", or
 Although there are more, traditionally you have three main options to choose between:
 
 * `apache2-mpm-prefork`
-   * This is stable and reliable, working well with non-threadsafe extensions.
+   * This is stable and reliable, working well with extensions which are not thread-safe.
    * It performs reasonably well, at low-levels of concurrency.
 * `apache2-mpm-worker`
    * This module uses threading, which improves concurrency.
@@ -28,7 +30,9 @@ Although there are more, traditionally you have three main options to choose bet
 * `apache2-mpm-event`
    * This is similar to the worker MPM, but uses a single dedicated thread to cope with KeepAlive-requests, rather than allowing all threads to be tied up in that fashion, via long-lived requests.
 
-`apache2-mpm-event` is a little too new to recommend, so on that basis your best choice for performance is almost certainly going to be `apache2-mpm-worker`.  The most important caveat being that if you choose this option you cannot use `mod_php`, and must instead handle your PHP code via a different mechanism (which turns out to be a speedup in its own right).
+Although `apache2-mpm-event` is relatively new, and thus less well known than the alternatives, it <b>is</b> the fastest of the big-three MPMs.
+
+The most important caveat with the different MPM modules is that you cannot use `mod_php` with either `apache-mpm-worker`, or `apache2-mpm-event`, instead you must handle your PHP code via a different mechanism (which turns out to be a speedup in its own right).
 
 
 Disabling `.htaccess` files
@@ -46,7 +50,7 @@ each of the following files:
 * `/var/www/a/.htaccess`
 
 This is clearly a lot of needless searching, and it is needless searching
-which will be constantly repeated.
+which will be constantly repeated by future HTTP-requests.
 
 To disable this behaviour you need to do two things:
 
