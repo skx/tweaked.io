@@ -78,5 +78,15 @@ If wish to report issues please do feel free to mail me direct, or
 report them in the github tracker.
 
 
+Licensing
+---------
+
+All content on this site written by myself is assumed to be written
+under terms of the GNU General public license, version 2.
+
+It is assumes contributions from others will be licensed under the
+same terms.
+
+
 Steve
 --
