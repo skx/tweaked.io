@@ -6,6 +6,9 @@
     <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
     <style type="text/css"><!-- tmpl_include name='input/css/s.css' --></style>
+    <!-- tmpl_if name='comments' -->
+    <link rel="stylesheet" type="text/css" href="/css/c.css" media="screen" />
+    <!-- /tmpl_if name='comments' -->
   </head>
   <body>
     <div id="header">
@@ -59,8 +62,7 @@
 
 
     <!-- tmpl_if name='comments' -->
-    <link rel="stylesheet" type="text/css" href="/css/c.css" media="screen" />
-    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js" type="text/javascript"></script>
     <script src="/js/index.js" type="text/javascript"></script>
     <script type="text/javascript">
       $( document ).ready(function() {
