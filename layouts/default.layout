@@ -1,44 +1,38 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB">
-<head>
-   <title>Optimizing servers<!-- tmpl_if name='title' --> - <!-- tmpl_var name='title' --><!-- tmpl_else -->: Tweaked.io<!-- /tmpl_if --></title>
-   <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
-   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
- <style><!-- tmpl_include name='input/css/s.css' --></style>
-</head>
-<body>
-
-  <div id="header">
-    <h1><a href="/">Tweaked.io</a> <span>making your servers fly</span></h1>
-  </div>
-<div id="navigation">
-   <ul>
-     <li <!-- tmpl_if name='contact_page' -->id="selected"<!-- /tmpl_if -->><a href="/contact/">Contact</a></li>
-     <li <!-- tmpl_if name='home_page' -->id="selected"<!-- /tmpl_if -->><a href="/">Home</a></li>
-   </ul>
-</div>
-
-
-  <div class="colmask leftmenu">
-    <div class="colleft">
-      <div class="col1" name="content" id="content">
-	<!-- Column 1 start -->
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>Optimizing servers<!-- tmpl_if name='title' --> - <!-- tmpl_var name='title' --><!-- tmpl_else -->: Tweaked.io<!-- /tmpl_if --></title>
+    <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <style><!-- tmpl_include name='input/css/s.css' --></style>
+  </head>
+  <body>
+    <div id="header">
+      <h1>Tweaked.io <span>making your servers fly</span></h1>
+    </div>
+    <div id="navigation">
+      <ul>
+	<li><a href="/">Home</a></li>
+	<li><a href="/contact/">Contact</a></li>
+      </ul>
+    </div>
+    <div id="content-container">
+      <div id="content">
         <!-- tmpl_var name='content' -->
 
-<!-- tmpl_if name='comments' -->
-       <div id="comments"></div>
-<!-- /tmpl_if -->
+        <!-- tmpl_if name='comments' -->
+        <div id="comments"></div>
+        <!-- /tmpl_if -->
 
-<!-- tmpl_if name='show_advert' -->
-  <!-- tmpl_include name='advert.inc' -->
-<!-- /tmpl_if -->
-	<!-- Column 1 end -->
+        <!-- tmpl_if name='show_advert' -->
+        <!-- tmpl_include name='advert.inc' -->
+        <!-- /tmpl_if -->
+
       </div>
-      <div class="col2">
-	<!-- Column 2 start -->
-        <h2>Optimizing</h2>
+      <div id="aside">
         <!-- tmpl_if name='menu' -->
+        <h2>Optimizing</h2>
         <div class="menu_simple">
           <ul>
             <!-- tmpl_loop name='menu' -->
@@ -46,7 +40,6 @@
             <!-- /tmpl_loop -->
           </ul>
         </div>
-        <!-- /tmpl_if -->
 
         <h2>Testing</h2>
         <div class="menu_simple">
@@ -56,24 +49,24 @@
             <li><a <!-- tmpl_if name='results' -->class="current" <!-- /tmpl_if -->  href="/benchmarking/results">Results</a></li>
           </ul>
         </div>
-        <!-- Column 2 end -->
+        <!-- /tmpl_if -->
+
       </div>
+
+      <p>&nbsp;</p>
+      <div id="footer"><!-- tmpl_var name='copyright' --></div>
     </div>
-  </div>
-  <div id="footer">
-    <p><!-- tmpl_var name='copyright' --></p>
-  </div>
 
-<!-- tmpl_if name='comments' -->
-  <link rel="stylesheet" type="text/css" href="/css/c.css" media="screen" />
-  <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-  <script src="/js/index.js" type="text/javascript"></script>
-  <script type="text/javascript">
-  $( document ).ready(function() {
-    discussion( "http://comments.tweaked.io/comments/<!-- tmpl_var name='comments' -->" );
-  });
-</script>
-<!-- /tmpl_if -->
 
-</body>
+    <!-- tmpl_if name='comments' -->
+    <link rel="stylesheet" type="text/css" href="/css/c.css" media="screen" />
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script src="/js/index.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      $( document ).ready(function() {
+      discussion( "http://comments.tweaked.io/comments/<!-- tmpl_var name='comments' -->" );
+      });
+    </script>
+    <!-- /tmpl_if -->
+  </body>
 </html>

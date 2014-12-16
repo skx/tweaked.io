@@ -1,28 +1,3 @@
-body {
-	margin:0;
-	padding:0;
-	border:0;			/* This removes the border around the viewport in old versions of IE */
-	width:100%;
-	background:white;
-	min-width:600px;    	/* Minimum width of layout - remove line if not required */
-					/* The min-width property does not work in old versions of Internet Explorer */
-	font-size:90%;
-}
-a {
-	color:#369;
-}
-a:hover {
-	color:red;
-	text-decoration:none;
-}
-h1, h2, h3 {
-	margin:.8em 0 .2em 0;
-	padding:0;
-}
-p {
-	margin:.4em 0 .8em 0;
-	padding:0;
-}
 img {
 	margin:10px 0 5px;
 }
@@ -30,90 +5,6 @@ img {
 	display:block;
 	padding-top:10px;
 }
-
-/* 'widths' sub menu */
-#layoutdims {
-	clear:both;
-	background:#eee;
-	border-top:4px solid #000;
-	margin:0;
-	padding:6px 15px !important;
-	text-align:right;
-}
-/* column container */
-.colmask {
-	position:relative;	/* This fixes the IE7 overflow hidden bug */
-	clear:both;
-	float:left;
-	width:100%;			/* width of whole page */
-	overflow:hidden;		/* This chops off any overhanging divs */
-}
-/* common column settings */
-.colright,
-.colmid,
-.colleft {
-	float:left;
-	width:100%;
-	position:relative;
-}
-.col1,
-.col2,
-.col3 {
-	float:left;
-	position:relative;
-	padding:0 0 1em 0;
-	overflow:hidden;
-}
-/* 2 Column (left menu) settings */
-.leftmenu {
-	background:#f4f4f4;	/* left column background colour */
-}
-.leftmenu .colleft {
-	right:75%;			/* right column width */
-	background:#f4f4f4;	/* left column background colour */
-}
-.leftmenu .col1 {
-	width:71%;			/* right column content width */
-	left:102%;			/* 100% plus left column left padding */
-}
-.leftmenu .col2 {
-	width:21%;			/* left column content width (column width minus left and right padding) */
-	left:6%;			/* (right column left and right padding) plus (left column left padding) */
-}
-/* Footer styles */
-#footer {
-	clear:both;
-	float:left;
-        text-align: right;
-	width:100%;
-	border-top:1px solid #000;
-}
-#footer p {
-	padding:10px;
-	margin:0;
-}
-
-
-#header {
-    padding-top: 5px;
-    text-align: center;
-    padding-bottom: 5px;
-    background:#f4f4f4;	/* left column background colour */
-
-}
-
-#header h1 a {
-    text-decoration: none;
-    color: red !important;
-}
-
-#header h1 span {
-    text-style: italic;
-    font-size: 0.8em;
-}
-
-
-
 .menu_simple ul {
     margin: 0;
     padding: 0;
@@ -124,9 +15,7 @@ img {
     text-decoration: none;
     color: black;
     padding: 10.5px 11px;
-    background-colour:#f4f4f4;
     display:block;
-    border-left: 1px solid #f4f4f4;
 }
 
 .menu_simple ul li a:visited {
@@ -134,10 +23,10 @@ img {
 }
 
 .menu_simple ul li a.current {
-    border-left: 1px solid black;
+    border-left: 1px solid #383;
 }
 .menu_simple ul li a:hover {
-    border-left: 1px solid red !important;
+    border-left: 1px solid #383 !important;
 }
 
 .code {
@@ -160,62 +49,98 @@ img {
     font-size:0.9em;
 }
 
-h2 {
-    margin-top: 2em;
-    width: 100%;
-    border-bottom: 1px solid black;
+#container
+{
+	margin: 0 auto;
+	width: 100%;
+	background: #fff;
 }
 
-h3 {
-    margin-top: 2em;
-    width: 100%;
-    border-bottom: 1px dashed black;
+#header
+{
+	background: #ccc;
+	padding: 20px;
 }
 
-#content ul {
-    list-style: none;
+#header h1 { margin: 0; }
+#header h1 span { font-size:75%; font-style: italic;}
+
+#navigation
+{
+	float: left;
+	width: 100%;
+	background: #333;
 }
 
 #navigation ul
 {
-    list-style-type:none;
-    float:left;
-    display:block;
-    width:100%;
-    clear:both;
-    margin:0px 0px 0px 0px;
-    padding:0px;
-    background-color:#f4f4f4;
-    border-top:1px solid #000000;
-    border-bottom:1px solid #000000;
+	margin: 0;
+	padding: 0;
 }
 
 #navigation ul li
 {
-    display:inline;
+	list-style-type: none;
+	display: inline;
 }
 
-#navigation a
+#navigation li a
 {
-    display:block;
-    float:right;
-    width:100px;
-    padding:10px 0px 10px 0px;
-    margin:0px;
-    text-decoration:none;
-    text-align:center;
-    border-left: 1px solid #f4f4f4;
-    color: red;
+	display: block;
+	float: left;
+	padding: 5px 10px;
+	color: #fff;
+	text-decoration: none;
+	border-right: 1px solid #fff;
 }
 
-#navigation a:visited, #navigation a:link
+#navigation li a:hover { background: #383; }
+
+#content-container
 {
-    background-color:#f4f4f4;
-    color:black;
+	float: left;
+	width: 100%;
+	background: #FFF url(/css/layout-two-liquid-background.gif) repeat-y 68% 0;
 }
 
-#navigation a:active, #navigation a:hover
+#content
 {
-    border-left: 1px solid red;
-    color:#000000;
+	clear: left;
+	float: left;
+	width: 60%;
+	padding: 20px 0;
+	margin: 0 0 0 4%;
+	display: inline;
+}
+
+#content h2 { margin: 0; }
+
+#aside
+{
+	float: right;
+	width: 26%;
+	padding: 20px 0;
+	margin: 0 3% 0 0;
+	display: inline;
+}
+
+#aside h3 { margin: 0; }
+
+#footer
+{
+	clear: left;
+	background: #ccc;
+	text-align: right;
+	padding: 20px;
+	height: 1%;
+}
+
+#content h1 {
+   border-bottom: 1px solid black;
+}
+
+#content h2 {
+   padding-top: 25px;
+   width:100%;
+   border-bottom: 1px dashed black;
 }
