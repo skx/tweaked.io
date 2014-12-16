@@ -5,7 +5,7 @@
     <title>Optimizing servers<!-- tmpl_if name='title' --> - <!-- tmpl_var name='title' --><!-- tmpl_else -->: Tweaked.io<!-- /tmpl_if --></title>
     <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-    <style><!-- tmpl_include name='input/css/s.css' --></style>
+    <style type="text/css"><!-- tmpl_include name='input/css/s.css' --></style>
   </head>
   <body>
     <div id="header">
