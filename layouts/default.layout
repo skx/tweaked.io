@@ -66,7 +66,8 @@
     <script src="/js/index.js" type="text/javascript"></script>
     <script type="text/javascript">
       $( document ).ready(function() {
-      discussion( "http://comments.tweaked.io/comments/<!-- tmpl_var name='comments' -->" );
+        var prot = ('https:' == document.location.protocol ? 'https://' : 'http://') ;
+        discussion( prot + "comments.tweaked.io/comments/<!-- tmpl_var name='comments' -->" );
       });
     </script>
     <!-- /tmpl_if -->
