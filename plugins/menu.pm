@@ -54,7 +54,7 @@ sub expand_variables
             #
             # Skip the general-page, and the considerations page.
             #
-            next if ( $section =~ /general/i );
+            next if ( $section =~ /(demo|general)/i );
 
             #
             #  Get the path to the current page being processed.
