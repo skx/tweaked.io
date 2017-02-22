@@ -72,8 +72,10 @@
 
 
     <!-- tmpl_if name='comments' -->
-    <script src="/js/jquery-1.11.2.min.js" type="text/javascript"></script>
-    <script src="/js/index.js" type="text/javascript"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js" integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="/css/c.css">
+    <script src="/js/mustache.js" type="text/javascript"></script>
+    <script src="/js/e-comments.js" type="text/javascript"></script>
     <script type="text/javascript">
       $( document ).ready(function() {
         var prot = ('https:' == document.location.protocol ? 'https://' : 'http://') ;
