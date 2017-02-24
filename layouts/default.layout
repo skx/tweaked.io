@@ -79,7 +79,7 @@
     <script type="text/javascript">
       $( document ).ready(function() {
         var prot = ('https:' == document.location.protocol ? 'https://' : 'http://') ;
-        discussion( prot + "comments.tweaked.io/comments/<!-- tmpl_var name='comments' -->" );
+        discussion( prot + "comments.tweaked.io/comments/<!-- tmpl_var name='comments' -->", { max_depth: 2, threading: true } );
       });
     </script>
     <!-- /tmpl_if -->
