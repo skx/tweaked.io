@@ -10,7 +10,7 @@
 //
 //  // begin
 //  <link rel="stylesheet" type="text/css" href="css/e-comments.css">
-//  <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+//  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 //  <script src="js/mustache.js" type="text/javascript"></script>
 //  <script src="js/e-comments.js" type="text/javascript"></script>
 //  <script type="text/javascript">
@@ -34,20 +34,46 @@
 // --
 
 
+var GLOBAL = {
+    //
+    // Is threading enabled?
+    //
+    threading: true,
 
-//
+    //
+    // Max depth of threaded-replies, if enabled.
+    //
+    max_depth: 0,
+
+    //
+    // ID of the div to work with
+    //
+    comments: "comments",
+};
+
+
 //
 // Load the comments by making a JSONP request to the given URL.
 //
 // The comments will invoke the `comments(data)` function, when loaded.
 //
 function loadComments(url, options, err) {
+
+    //
+    // Save any supplied options away.
+    //
+    if ( options ) {
+        jQuery.each(options, function (name, value) {
+            GLOBAL[name] = value;
+        } );
+    }
+
     $.ajax({
         url: url + "?callback=?",
         dataType: 'jsonp',
         crossDomain: true,
         complete: (function() {
-            populateReplyForm(url, options, err);
+            bindEventHandlers(url, options, err);
         })
     });
 }
@@ -58,7 +84,6 @@ function loadComments(url, options, err) {
 // This is used to create a dynamic reply-to form which can reply to
 // a specific parent-comment.kfor the given comment
 //
-//  TODO: Make this a mustache template too.
 //
 function replyForm(parent) {
     var form_template = '\
@@ -83,7 +108,7 @@ function replyForm(parent) {
         </tr> \
         <tr> \
           <td></td> \
-          <td align=right"><input type="submit" value="Add Comment"/></td> \
+          <td align="right"><input type="submit" value="Add Comment"/></td> \
         </tr> \
       </table> \
             </td> \
@@ -101,20 +126,47 @@ function replyForm(parent) {
   </blockquote> \
 ';
 
-    var html = Mustache.render( form_template, { parent: parent } );
-    return( html );
+    //
+    // If we were given a template, then use that.
+    //
+    if (GLOBAL && GLOBAL['reply_template']) {
+        form_template = $(GLOBAL['reply_template']).html();
+    }
+
+    var html = Mustache.render(form_template, {
+        parent: parent
+    });
+    return (html);
 }
 
 
 //
 // Called when the JSONP data is loaded.
 //
+// This function will be invoked with a JSON array of hashes.
+//
+// Each array-member represents a single comment, and the hash
+// will contain keys such as:
+//
+//   author    The author of the comment.  (Name)
+//   body      The body of the comment.
+//   gravitar  The Gravitar link for this auther
+//   parent    The parent-comment, if any.
+//
+// For each comment we add a rendered fragment of HTML to the
+// output-div, as well as a per-comment reply form (if nested
+// comments are enabled).
+//
+// Once we've completed the end result will be that the `comments`
+// div will be populated, then we setup event-handlers such that
+// the expected functions will be invoked on clicks.
+//
 function comments(data) {
 
     //
     // We're given a DIV with ID comments.  Empty it.
     //
-    $("#comments").html("");
+    $("#" + GLOBAL['comments']).html("");
 
     //
     // We might lose this - I'm undecided.
@@ -125,24 +177,47 @@ function comments(data) {
     // If there are some comments we should post a header.
     //
     if (data.length > 0) {
-        $("#comments").prepend("<h2>Comments</h2>");
+        $("#"+ GLOBAL['comments']).prepend("<h2>Comments</h2>");
     } else {
-        $("#comments").prepend("<h2>No Comments</h2>");
+        $("#"+ GLOBAL['comments']).prepend("<h2>No Comments</h2>");
     }
+
+
+    //
+    // Count the thread-depth for each comment.
+    //
+    // The key is the UUID of the particular comment.
+    //
+    var nesting = {};
 
     //
     // For each comment.
     //
     $.each(data, function(key, val) {
 
+
         //
         // This builds a (hidden) reply-to form for the given comment.
         //
         val.reply = function() {
-            return function(uuid){
-                return( replyForm( val.uuid) );
+            return function(uuid) {
+                return (replyForm(val.uuid));
             }
         };
+
+        //
+        // Calculate the thread-depth of the current comment.
+        //
+        val.depth = function() {
+            return function(uuid) {
+                return (nesting[val.uuid]);
+            }
+        };
+
+        //
+        // Is threading enabled?
+        //
+        val.threading = GLOBAL['threading'];
 
         //
         // We have a hash of data in the val-argument,
@@ -152,7 +227,7 @@ function comments(data) {
         // gravitar value.  That will either contain a (protocol-agnostic)
         // URL, or be empty.
         //
-        if ( val['gravitar'] ) {
+        if (val['gravitar']) {
             val['gravitar'] = "<img alt=\"[gravitar]\" src=\"" + val['gravitar'] + "\" class=\"avatar\" width=\"33\" height=\"32\">&nbsp;&nbsp;";
         }
 
@@ -164,40 +239,62 @@ function comments(data) {
         var comment_template = ' \
 <div class="comment"> \
   <div class="link"><a href="#comment_{{ id }}">#{{ id }}</a></div> \
-  <div class=\"title\">{{{ gravitar }}}<a name="comment_{{ id }}">Author: {{ author }}</a></div> \
-  <div class="tagline">Posted {{ ago }}.</div> \
+  <div class="title">{{{ gravitar }}}<a name="comment_{{ id }}">Author: {{ author }}</a></div> \
+  <div class="tagline">Posted <span title="{{ time }} ">{{ ago }}</span>.</div> \
   <div class="body">{{{ body }}}</div> \
-  <div class="replyto"><a href="#">Reply to this comment</a>\
-    <div style="display:none; margin:50px; padding:50px; border:1px solid black;">{{#reply}}{{ uuid }}{{/reply}}</div> \
-  </div> \
+  {{#threading}}<div class="replyto"><a href="#">Reply to this comment</a><div style="display:none; margin:50px; padding:50px; border:1px solid black;">{{#reply}}{{ uuid }}{{/reply}}</div></div>{{/threading}} \
 </div> \
 <div class="comment-spacing"></div> \
 <div style="margin: 50px;" id="replies-{{ uuid }}"></div> \
 ';
 
         //
+        // If we were given a display-template, then use that.
+        //
+        if (GLOBAL && GLOBAL['comment_template']) {
+            comment_template = $(GLOBAL['comment_template']).html();
+        }
+
+        //
+        // Record the depth of this comment.
+        //
+        // The depth is the parent's depth + 1
+        //
+        // If there is no parent then we default to one, as expected.
+        //
+        if (val['parent']) {
+            nesting[ val['uuid'] ] = nesting[ val['parent'] ] + 1;
+        } else {
+            nesting[ val['uuid'] ] = 1;
+        }
+
+        //
+        // Disable replies if the current thread is "too deep".
+        //
+        if( ( GLOBAL['max_depth'] ) && ( val.threading ) )
+            if ( ( GLOBAL['max_depth'] != 0 ) && ( nesting[ val['uuid'] ] > GLOBAL['max_depth' ] ) )
+                val.threading = false;
+
+        //
         // Render the output.
         //
-        var html = Mustache.render( comment_template, val );
+        var html = Mustache.render(comment_template, val);
 
         //
         // If this particular comment is a nested one then we
         // need to insert it into the correct location.
         //
-        if ( val['parent'] )
-        {
+        if (val['parent']) {
             //
             // Append this comment beneath the named comment.
             //
             $("#replies-" + val['parent']).append(html);
-        }
-        else
-        {
+        } else {
             //
             // Otherwise just append to the bottom of our list
             // of comments.
             //
-            $("#comments").append(html);
+            $("#"+ GLOBAL['comments']).append(html);
         }
 
         //
@@ -207,16 +304,87 @@ function comments(data) {
     });
 
     //
+    // Now we're going to truncate the bodies of long comments.
+    //
+    // This should have been done when the comment-bodies were inserted
+    // but for the moment it goes here.
+    //
+    // We'll show ten lines by default, or 1024 characters.
+    //
+    var minimized_elements = $('.body');
+    var max_lines          = 10;
+    var max_length         = 1024;
+
+    minimized_elements.each(function(){
+
+        //
+        // Split on newlines.
+        //
+        var text   = $(this).html()
+        var lines  = text.split(/[\r\n]/);
+        var lcount = lines.length;
+
+        var trunc = undefined;
+        var rest  = undefined;
+
+        //
+        // Too many lines?
+        //
+        if ( lcount >= max_lines )
+        {
+            //
+            // The truncated text, and the rest of that text.
+            //
+            trunc = lines.slice(0, max_lines).join("\n");
+            rest  = lines.slice(max_lines, lcount).join("\n");
+        }
+
+        //
+        // Too much text?
+        //
+        if ( ( text.length > max_length ) && ( trunc == undefined ) )
+        {
+            //
+            // The truncated text, and the rest of the text.
+            //
+            trunc = text.substr(0,max_length);
+            rest  = text.substr(max_length);
+        }
+
+        //
+        // If we have `truncated` and `rest` of the text then
+        // update the DOM to show the truncated version and the
+        // magic-link to expand the text.
+        //
+        if ( trunc && rest )
+        {
+            //
+            // Modify the display of the body.
+            //
+            $(this).html(
+                trunc +
+                    '<br/><a href="#" class="more">Read more ..</a>' +
+                    '<span style="display:none;">'+ rest +'</span>'
+            );
+        }
+    });
+
+    //
     // Add a new top-level reply form.
     //
-    $("#comments").append(replyForm(null));
+    $("#"+ GLOBAL['comments']).append(replyForm(null));
 
 }
 
 //
-// Generate the reply-form for users to add comments.
+// This function is called after the JSONP-callback function,
+// which is responsible for parsing and inserting the comments/forms
+// into the HTML-page.
 //
-function populateReplyForm(url, options, err) {
+// This function sets up the event-handles such that those freshly
+// inserted forms and divs work as expected.
+//
+function bindEventHandlers(url, options, err) {
 
     //
     // Now we've rendered the comments, and populated the
@@ -249,7 +417,8 @@ function populateReplyForm(url, options, err) {
         //
         var data = $(this).serialize();
 
-        // Send the POST
+        //
+        // Send the POST-request
         //
         $.ajax({
             type: "POST",
@@ -257,19 +426,17 @@ function populateReplyForm(url, options, err) {
             data: data,
             error: function(r, e) {
                 var err = false;
-                if (r.status == 500 )
-                {
+                if (r.status == 500) {
                     err = r.responseText;
                 }
-                loadComments(url, options, err );
+                loadComments(url, options, err);
             },
             complete: function(r, e) {
                 var err = false;
-                if (r.status == 500 )
-                {
+                if (r.status == 500) {
                     err = r.responseText;
                 }
-                loadComments(url, options, err );
+                loadComments(url, options, err);
             },
             datatype: 'jsonp',
         });
@@ -280,14 +447,42 @@ function populateReplyForm(url, options, err) {
     //
     // Toggle reply-to comment div.
     //
-    $(".replyto a").on( 'click', (function () {
+    $(".replyto a").on('click', (function() {
         $(this).closest("div").children("div").toggle();
         return false;
     }));
 
 
+    //
+    // Allow long comments - which are possibly SPAM? - to be displayed.
+    //
+    $('a.more').click(function(event){
+        event.preventDefault();
+        $(this).hide().prev().toggle();
+        $(this).next().toggle();
+    });
+
+    //
+    // If there was an error submitting the comment then handle it here.
+    //
+    // We do two things:
+    //
+    //  * Prepend the error-message to the comment-area.
+    //
+    //  * Scroll to make sure that is visible.
+    //
+    // Downside is we lose the comment/author/name, which is a shame.
+    //
+    // (The reason we lose this is that we nuke the existing contents
+    // of the comment-div, and then reinsert the existing values from
+    // scratch as a result of the AJAX POST request completing.)
+    //
     if (err) {
-        alert("<h2>Comment Rejected</h2><blockquote><p>Your comment was not submitted: " + err + "</p></blockquote>");
+        $("#"+ GLOBAL['comments']).prepend("<h2>Comment Rejected</h2><blockquote><p>Your comment was not submitted.</p><p><b>" + err + "</b></p></blockquote>");
+
+        $('html, body').animate({
+            scrollTop: $("#"+ GLOBAL['comments']).offset().top
+        }, 1000);
     }
 }
 
