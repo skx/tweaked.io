@@ -1,7 +1,7 @@
 #!/bin/sh
-if [ -d ~/Repos/personal/e-comments ]; then
-    cp ~/Repos/personal/e-comments/client/js/* input/js
-    cp ~/Repos/personal/e-comments/client/css/e-comments.css input/css/c.in
+if [ -d ~/Repos/github.com/skx/e-comments/ ]; then
+    cp ~/Repos/github.com/skx/e-comments/client/js/* input/js
+    cp ~/Repos/github.com/skx/e-comments/client/css/e-comments.css input/css/c.in
     cd input/css && make
     exit 0
 else

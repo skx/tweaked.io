@@ -8,3 +8,8 @@ This is a demo page
 ===================
 
 You can play with leaving comments.
+
+* Threading is enabled.
+* The thread-depth is capped at 2.
+
+Further details on the [project page](https://github.com/skx/e-comments).
